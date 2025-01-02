@@ -1,3 +1,4 @@
+## erd 다이어그램
 ```mermaid
 erDiagram
     USER {
@@ -50,8 +51,12 @@ erDiagram
         int id PK
         int user_id FK
         int concert_id FK
-        int wait_num
-        datetime expire_at
+        datetime expired_at
+    }
+
+    QUEUE {
+        int id PK
+        int token_id FK
     }
 
     USER ||--o{ POINT : ""
@@ -66,4 +71,6 @@ erDiagram
 
     SEAT ||--o{ RESERVATION : ""
     SEAT ||--o{ PAYMENT : ""
+
+    TOKEN ||--o{ QUEUE : ""
 ```

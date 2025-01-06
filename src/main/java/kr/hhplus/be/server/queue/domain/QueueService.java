@@ -37,7 +37,20 @@ public class QueueService {
     }
 
     public TokenResponse getQueueStatus(String uuid, Long scheduleId) {
-        return null;
+        // UUID, scheduleId를 통한 대기열 상태 조회
+        Queue queue = queueRepositoryImpl.findByUuidAndScheduleId(uuid, scheduleId)
+                .orElseThrow(() -> new RuntimeException("대기열을 찾을 수 없습니다.")); // UUID로 대기열 조회
+
+        // 상태 값이 ACTIVE 인 경우
+        if (queue.getStatus().equals("ACTIVE")) {
+            return new TokenResponse(true);
+        }
+
+        // 대기 중인 인원 수
+        Long waitingCount = queueRepositoryImpl.countByStatusAndIdLessThan("INACTIVE", queue.getId());
+
+        // TokenResponse 객체 생성 및 반환
+        return new TokenResponse( waitingCount, false);
     }
 
 

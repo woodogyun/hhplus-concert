@@ -22,5 +22,12 @@ public class QueueRepositoryImpl implements QueueRepository {
     public Optional<Queue> findByScheduleIdAndUserId(Long userId, Long scheduleId) {
         return queueJPARepository.findByScheduleIdAndUserId(userId, scheduleId);
     }
-
+    @Override
+    public Long countByStatusAndIdLessThan(String status, Long id) {
+        return queueJPARepository.countByStatusAndIdLessThan(status, id);
+    }
+    @Override
+    public Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId) {
+        return queueJPARepository.findByUuidAndScheduleId(uuid, scheduleId);
+    }
 }

@@ -29,7 +29,8 @@ public class QueueController {
     @Operation(summary = "대기열 순번 조회")
     @GetMapping("/{schedule-id}/status")
     public TokenResponse getQueueStatus(@RequestHeader("x-token") String uuid, @PathVariable("sche0dule-id")Long scheduleId) {
-        return null;
+        //scheduleId
+         return queueService.getQueueStatus(uuid, scheduleId);
     }
 
     @PostMapping("/token")

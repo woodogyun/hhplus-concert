@@ -69,9 +69,12 @@ CREATE TABLE TOKEN (
     INDEX idx_concert_id (concert_id) -- 콘서트 ID에 대한 인덱스
 );
 
--- 대기열 정보를 저장하는 테이블
-CREATE TABLE QUEUE (
-    id INT PRIMARY KEY,          -- 대기열 ID (기본 키)
-    token_id INT,               -- 토큰 ID
-    INDEX idx_token_id (token_id) -- 토큰 ID에 대한 인덱스
+CREATE TABLE queue (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY, -- 기본 키 및 순번 파악
+    user_id BIGINT NOT NULL, -- 유저 ID
+    uuid VARCHAR(255) NOT NULL UNIQUE, -- UUID
+    schedule_id BIGINT NOT NULL, -- 스케줄 ID
+    expires_at DATETIME, -- 만료 시간
+    status VARCHAR(255) NOT NULL -- 상태
 );
+

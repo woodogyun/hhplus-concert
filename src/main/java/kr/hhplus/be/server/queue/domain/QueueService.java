@@ -4,9 +4,12 @@ import kr.hhplus.be.server.common.QueueStatus;
 import kr.hhplus.be.server.queue.dto.TokenResponse;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,22 +59,42 @@ public class QueueService {
 
     // ACTIVE 상태의 대기열 수를 카운팅하는 메서드
     public int countActiveQueues() {
-        return 0;
+        return queueRepositoryImpl.countByStatus("ACTIVE");
     }
 
     // 대기열에 만료된 토큰 제거하는 메서드
     @Transactional
     public long deleteToken() {
-        return 0;
+        List<Queue> expiredTokens = queueRepositoryImpl.findExpiredTokens(); // 만료된 토큰 조회
+        long count = expiredTokens.size(); // 제거할 토큰 수 계산
+
+        if(count > 0) {
+            queueRepositoryImpl.deleteAll(expiredTokens); // 만료된 토큰 삭제
+        }
+
+        return count; // 제거된 토큰 수 반환
     }
 
     public List<Queue> findTopNByInactive(long count) {
-        return null;
+        // 탑 N 개의 "INACTIVE" 상태 큐를 조회
+        Pageable pageable = PageRequest.of(0, (int) count); // 페이지 번호는 0부터 시작
+        return queueRepositoryImpl.findTopNByInactive(pageable);
     }
 
     // 최신 순번을 변경하는 메서드
     @Transactional
     public int updateToken(List<Queue> queuesToUpdate) {
-        return 0;
+        // 현재 시간 + 만료 시간 계산
+        LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES);
+
+        // 각 토큰의 상태와 만료 시간을 업데이트
+        for (Queue queue : queuesToUpdate) {
+            queue.setStatus("ACTIVE");
+            queue.setExpiresAt(expiresAt);
+        }
+
+        // 변경 사항을 저장
+        List<Queue> list = queueRepositoryImpl.saveAll(queuesToUpdate);
+        return list.size();
     }
 }

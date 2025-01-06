@@ -3,8 +3,10 @@ package kr.hhplus.be.server.queue.infra;
 import kr.hhplus.be.server.queue.domain.Queue;
 import kr.hhplus.be.server.queue.domain.QueueRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,12 +24,40 @@ public class QueueRepositoryImpl implements QueueRepository {
     public Optional<Queue> findByScheduleIdAndUserId(Long userId, Long scheduleId) {
         return queueJPARepository.findByScheduleIdAndUserId(userId, scheduleId);
     }
+
+    @Override
+    public List<Queue> findExpiredTokens() {
+        return queueJPARepository.findExpiredTokens();
+    }
+
+    @Override
+    public List<Queue> findTopNByInactive(Pageable pageable) {
+        return queueJPARepository.findTopNByInactive(pageable);
+    }
+
     @Override
     public Long countByStatusAndIdLessThan(String status, Long id) {
         return queueJPARepository.countByStatusAndIdLessThan(status, id);
     }
+
+    @Override
+    public int countByStatus(String status) {
+        return (int) queueJPARepository.countByStatus(status);
+    }
+
     @Override
     public Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId) {
         return queueJPARepository.findByUuidAndScheduleId(uuid, scheduleId);
     }
+
+    @Override
+    public void deleteAll(List<Queue> queues) {
+        queueJPARepository.deleteAll(queues);
+    }
+
+    @Override
+    public List<Queue> saveAll(List<Queue> queues) {
+        return queueJPARepository.saveAll(queues);
+    }
+
 }

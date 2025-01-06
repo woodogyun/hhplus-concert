@@ -1,10 +1,10 @@
-package kr.hhplus.be.server.module.user.application;
+package kr.hhplus.be.server.user.application;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.module.user.dto.PointResponse;
+import kr.hhplus.be.server.user.dto.PointResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

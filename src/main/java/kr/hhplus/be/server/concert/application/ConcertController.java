@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.module.concert.application;
+package kr.hhplus.be.server.concert.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.module.concert.dto.AvailableSeatResponse;
-import kr.hhplus.be.server.module.concert.dto.SeatResponse;
+import kr.hhplus.be.server.concert.dto.AvailableSeatResponse;
+import kr.hhplus.be.server.concert.dto.SeatResponse;
 
 @RestController
 @RequestMapping("/api/concert")

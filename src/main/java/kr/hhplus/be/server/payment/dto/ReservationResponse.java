@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.module.payment.dto;
+package kr.hhplus.be.server.payment.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

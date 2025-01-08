@@ -9,6 +9,6 @@ public record SeatResponse(
     long seatId,
 
     @Schema(description = "좌석 상태")
-    String status
+    String state
 
 ) {}

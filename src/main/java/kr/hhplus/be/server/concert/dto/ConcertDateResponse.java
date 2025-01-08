@@ -1,13 +1,14 @@
 package kr.hhplus.be.server.concert.dto;
 
-import java.time.LocalDateTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 @Schema(description = "좌석 정보를 반환합니다.")
-public record AvailableSeatResponse(
+public record ConcertDateResponse(
     @Schema(description = "콘서트 스케줄 아이디")
     long scheduleId,
 
-    @Schema(description = "콘서트 날짜")
-    LocalDateTime date
+    @Schema(description = "콘서트 공연 날짜")
+    LocalDateTime performanceDateAt
 ) {}

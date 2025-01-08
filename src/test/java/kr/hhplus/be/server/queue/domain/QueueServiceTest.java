@@ -1,7 +1,5 @@
-package kr.hhplus.be.server;
+package kr.hhplus.be.server.queue.domain;
 
-import kr.hhplus.be.server.queue.domain.Queue;
-import kr.hhplus.be.server.queue.domain.QueueService;
 import kr.hhplus.be.server.queue.dto.TokenResponse;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;

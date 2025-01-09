@@ -3,15 +3,10 @@ package kr.hhplus.be.server.concert.application.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.common.SeatState;
-import kr.hhplus.be.server.concert.domain.service.ConcertService;
-import kr.hhplus.be.server.concert.domain.entity.Seat;
 import kr.hhplus.be.server.concert.application.dto.ConcertDateResponse;
 import kr.hhplus.be.server.concert.application.dto.SeatResponse;
-import kr.hhplus.be.server.config.PolicyProperties;
-import kr.hhplus.be.server.payment.domain.service.ReservationService;
+import kr.hhplus.be.server.concert.application.facade.ConcertFacade;
 import kr.hhplus.be.server.payment.application.dto.ReservationResponse;
-import kr.hhplus.be.server.queue.domain.entity.Queue;
-import kr.hhplus.be.server.queue.domain.service.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,22 +19,19 @@ import java.util.List;
 @Tag(name = "콘서트 API", description = "콘서트 API")
 public class ConcertController {
 
-    private final PolicyProperties policyProperties;
-    private final ConcertService concertService;
-    private final QueueService queueService;
-    private final ReservationService reservationService;
+    private final ConcertFacade concertFacade;
 
     @Operation(summary = "콘서트 예약 가능 날짜")
     @GetMapping("/{concert-id}")
     public List<ConcertDateResponse> getAvailableDates(@PathVariable(value = "concert-id") long concertId) {
-        return concertService.availableSeats(concertId, LocalDateTime.now());
+        return concertFacade.availableSeats(concertId, LocalDateTime.now());
     }
     
     @Operation(summary = "좌석 조회")
     @GetMapping("/{schedule-id}/seat")
     public List<SeatResponse> getSeats(@PathVariable(value = "schedule-id") long scheduleId) {
         SeatState seatState = SeatState.AVAILABLE;
-        return concertService.getSeats(scheduleId, seatState);
+        return concertFacade.getSeats(scheduleId, seatState);
     }
 
     @Operation(summary = "좌석 클릭 시 좌석 상태 변경")
@@ -48,12 +40,7 @@ public class ConcertController {
                                            @RequestHeader("x-token") String uuid) {
         // TODO : 하드코딩 된 유저 아이디 추후에 수정
         long userId = 1L;
-        
-        Seat seat = concertService.reserveSeat(seatId);
-        Queue queue = queueService.getToken(uuid);
-        queueService.updateToken(List.of(queue), policyProperties.getSeatExpiredMinutes());
-        reservationService.setReserve(seat.getId(), seat.getPrice(), userId);
-        return new ReservationResponse(false);
+        return concertFacade.reserveSeat(seatId, uuid, userId);
     }
 
 }

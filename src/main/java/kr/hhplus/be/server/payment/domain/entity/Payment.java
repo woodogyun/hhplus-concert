@@ -19,4 +19,10 @@ public class Payment {
     @Column(name = "user_id", nullable = false)
     private Long userId; // 사용자 ID
 
+    @Column(name = "reservation_id", nullable = false)
+    private Long reservationId;
+
+    @Column(name = "amount", nullable = false)
+    private Integer amount;
+
 }

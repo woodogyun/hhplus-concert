@@ -6,9 +6,11 @@ import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.application.dto.response.ConcertDateResponse;
 import kr.hhplus.be.server.concert.application.dto.response.SeatResponse;
 import kr.hhplus.be.server.concert.application.facade.ConcertFacade;
-import kr.hhplus.be.server.payment.application.dto.ReservationResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,15 +34,6 @@ public class ConcertController {
     public List<SeatResponse> getSeats(@PathVariable(value = "schedule-id") long scheduleId) {
         SeatState seatState = SeatState.AVAILABLE;
         return concertFacade.getSeats(scheduleId, seatState);
-    }
-
-    @Operation(summary = "좌석 클릭 시 좌석 상태 변경")
-    @PostMapping("/{seat-id}/reserve")
-    public ReservationResponse reserveSeat(@PathVariable(value = "seat-id") long seatId,
-                                           @RequestHeader("x-token") String uuid) {
-        // TODO : 하드코딩 된 유저 아이디 추후에 수정
-        long userId = 1L;
-        return concertFacade.reserveSeat(seatId, uuid, userId);
     }
 
 }

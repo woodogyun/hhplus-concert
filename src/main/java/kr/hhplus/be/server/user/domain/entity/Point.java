@@ -22,4 +22,18 @@ public class Point {
     @Column(name = "value", nullable = false)
     private Long value; // 포인트
 
+    public void decrease(Integer value) {
+        if (this.value < value) {
+            throw new IllegalArgumentException("잘못된 포인트 값 입니다.");
+        }
+        this.value -= value;
+    }
+
+    public void increase(int value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("잘못된 포인트 값 입니다.");
+        }
+        this.value += value;
+    }
+
 }

@@ -48,10 +48,12 @@ public class ConcertFacade {
 
     @Transactional
     public ReservationResponse reserveSeat(long seatId, String uuid, Long userId) {
+        LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(policyProperties.getSeatExpiredMinutes());
+
         Seat seat = seatService.reserveSeat(seatId);
         Queue queue = queueService.getToken(uuid);
-        queueService.updateToken(List.of(queue), policyProperties.getSeatExpiredMinutes());
-        reservationService.setReserve(seat.getId(), seat.getPrice(), userId);
+        queueService.updateToken(List.of(queue), expiresAt);
+        reservationService.setReserve(seat.getId(), seat.getPrice(), userId, expiresAt);
         return new ReservationResponse(false);
     }
 

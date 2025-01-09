@@ -85,10 +85,7 @@ public class QueueService {
 
     // 최신 순번을 변경하는 메서드
     @Transactional
-    public int updateToken(List<Queue> queuesToUpdate, int expirationMinutes) {
-        // 현재 시간 + 만료 시간 계산
-        LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(expirationMinutes);
-
+    public int updateToken(List<Queue> queuesToUpdate, LocalDateTime expiresAt) {
         // 각 토큰의 상태와 만료 시간을 업데이트
         for (Queue queue : queuesToUpdate) {
             queue.setStatus("ACTIVE");

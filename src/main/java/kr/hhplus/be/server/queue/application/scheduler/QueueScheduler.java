@@ -22,6 +22,8 @@ public class QueueScheduler {
 
     @Scheduled(fixedRate = 5000) // 5초마다 실행
     public void manageQueue() {
+        int maxQueueCapacity =  policyProperties.getMaxQueueCapacity();
+
         // 만료된 토큰 제거
         long expiredTokenCount = queueService.deleteToken(); // 만료된 토큰 수를 반환하는 메서드 호출
         log.info("Expired Token Count: {}", expiredTokenCount);
@@ -31,10 +33,10 @@ public class QueueScheduler {
         log.info("Active Queue Count: {}", activeQueueCount);
 
         // ACTIVE 상태의 대기열 수가 50명 미만인 경우
-        if (activeQueueCount < policyProperties.getMaxQueueCapacity()) {
-            long toEnter = policyProperties.getMaxQueueCapacity() - activeQueueCount; // 진입할 인원 수 계산
+        if (activeQueueCount < maxQueueCapacity) {
+            long toEnter = maxQueueCapacity - activeQueueCount; // 진입할 인원 수 계산
             List<Queue> queuesToUpdate = queueService.findTopNByInactive(toEnter);
-            int updateTokenCount = queueService.updateToken(queuesToUpdate, policyProperties.getExpirationMinutes()); // 최신 순번 변경 로직 호출
+            int updateTokenCount = queueService.updateToken(queuesToUpdate, policyProperties.calculateTokenExpirationTime()); // 최신 순번 변경 로직 호출
             log.info("Update Queue Count: {}", updateTokenCount);
 
         }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,5 +28,14 @@ public class ConcertRepositoryImpl implements ConcertRepository {
         return seatJPARepository.findByScheduleIdAndState(scheduleId, state);
     }
 
+    @Override
+    public Optional<Seat> findByIdAndState(Long seatId, SeatState state) {
+        return seatJPARepository.findByIdAndState(seatId, state);
+    }
+
+    @Override
+    public Seat save(Seat seat) {
+        return seatJPARepository.save(seat);
+    }
 
 }

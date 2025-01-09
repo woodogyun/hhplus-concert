@@ -1,9 +1,9 @@
 package kr.hhplus.be.server.concert.infra;
 
 import kr.hhplus.be.server.common.SeatState;
-import kr.hhplus.be.server.concert.domain.ConcertRepository;
-import kr.hhplus.be.server.concert.domain.ConcertSchedule;
-import kr.hhplus.be.server.concert.domain.Seat;
+import kr.hhplus.be.server.concert.domain.repository.ConcertRepository;
+import kr.hhplus.be.server.concert.domain.entity.ConcertSchedule;
+import kr.hhplus.be.server.concert.domain.entity.Seat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

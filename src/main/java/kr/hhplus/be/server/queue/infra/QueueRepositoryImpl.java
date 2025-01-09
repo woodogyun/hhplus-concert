@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.queue.infra;
 
-import kr.hhplus.be.server.queue.domain.Queue;
-import kr.hhplus.be.server.queue.domain.QueueRepository;
+import kr.hhplus.be.server.queue.domain.entity.Queue;
+import kr.hhplus.be.server.queue.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -48,6 +48,16 @@ public class QueueRepositoryImpl implements QueueRepository {
     @Override
     public Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId) {
         return queueJPARepository.findByUuidAndScheduleId(uuid, scheduleId);
+    }
+
+    @Override
+    public Optional<Queue> findByUuid(String uuid) {
+        return queueJPARepository.findByUuid(uuid);
+    }
+
+    @Override
+    public boolean existsByUuid(String uuid) {
+        return queueJPARepository.existsByUuid(uuid);
     }
 
     @Override

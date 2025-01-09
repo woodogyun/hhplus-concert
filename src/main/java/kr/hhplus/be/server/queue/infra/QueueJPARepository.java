@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.infra;
 
-import kr.hhplus.be.server.queue.domain.Queue;
+import kr.hhplus.be.server.queue.domain.entity.Queue;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +29,7 @@ public interface QueueJPARepository extends JpaRepository<Queue, Long> {
 
     Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId);
 
+    Optional<Queue> findByUuid(String uuid);
+
+    boolean existsByUuid(String uuid);
 }

@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.concert.infra;
 
-import kr.hhplus.be.server.concert.domain.ConcertSchedule;
+import kr.hhplus.be.server.concert.domain.entity.ConcertSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.concert.domain;
 
+import kr.hhplus.be.server.common.ReservationState;
 import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.dto.ConcertDateResponse;
 import kr.hhplus.be.server.concert.dto.SeatResponse;
@@ -88,7 +89,7 @@ class ConcertServiceTest {
         // then: 메서드 호출 및 결과 검증
         Seat reservedSeat = concertService.reserveSeat(seatId);
 
-        assertEquals(SeatState.UNAVAILABLE, reservedSeat.getState());
+        assertEquals(ReservationState.IN_PROGRESS, reservedSeat.getState());
         verify(concertRepository).save(seat);
     }
 

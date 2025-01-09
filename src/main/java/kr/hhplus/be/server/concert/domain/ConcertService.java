@@ -1,12 +1,15 @@
 package kr.hhplus.be.server.concert.domain;
 
+import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.dto.ConcertDateResponse;
+import kr.hhplus.be.server.concert.dto.SeatResponse;
 import kr.hhplus.be.server.concert.infra.ConcertRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -24,6 +27,13 @@ public class ConcertService {
                 )).toList();
     }
 
+    //2. scheduleId를 받아 좌석 정보 조회
+    public List<SeatResponse> getSeats(long scheduleId, SeatState seatStatus) {
+        List<Seat> list = concertRepository.findByScheduleIdAndState(scheduleId, seatStatus);
+        return list.stream()
+                .map(seat -> new SeatResponse(seat.getId(), seat.getState().name())) // SeatResponse의 생성자에 맞게 수정
+                .collect(Collectors.toList());
 
+    }
 
 }

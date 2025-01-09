@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.concert.infra;
 
+import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.domain.ConcertRepository;
 import kr.hhplus.be.server.concert.domain.ConcertSchedule;
+import kr.hhplus.be.server.concert.domain.Seat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +15,16 @@ import java.util.List;
 public class ConcertRepositoryImpl implements ConcertRepository {
 
     private final ConcertScheduleJPARepository concertScheduleJPARepository;
+    private final SeatJPARepository seatJPARepository;
 
     @Override
     public List<ConcertSchedule> findAvailableConcertSchedules(long concertId, LocalDateTime currentDate) {
         return concertScheduleJPARepository.findAvailableConcertSchedules(concertId, currentDate);
+    }
+
+    @Override
+    public List<Seat> findByScheduleIdAndState(Long scheduleId, SeatState state) {
+        return seatJPARepository.findByScheduleIdAndState(scheduleId, state);
     }
 
 

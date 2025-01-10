@@ -2,6 +2,7 @@ package kr.hhplus.be.server.payment.application.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.hhplus.be.server.payment.application.dto.PaymentRequest;
 import kr.hhplus.be.server.payment.application.dto.PaymentResponse;
 import kr.hhplus.be.server.payment.application.dto.ReservationResponse;
 import kr.hhplus.be.server.payment.application.facade.PaymentFacade;
@@ -27,9 +28,8 @@ public class PaymentController {
 
     @Operation(summary = "좌석 결제")
     @PostMapping("/{seat-id}/reserve")
-    public PaymentResponse processPayment(@PathVariable(value = "seat-id") String seatId) {
-//        return new PaymentResponse(true);
-        paymentFacade.processPayment(seatId);
+    public PaymentResponse processPayment(@PathVariable(value = "seat-id") String seatId, @RequestBody PaymentRequest request) {
+        paymentFacade.processPayment(seatId, request);
         return null;
     }
 

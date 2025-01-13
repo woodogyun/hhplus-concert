@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/reservation")
 @RequiredArgsConstructor
 @Tag(name = "결제 API", description = "결제 API")
 public class ReservationController {

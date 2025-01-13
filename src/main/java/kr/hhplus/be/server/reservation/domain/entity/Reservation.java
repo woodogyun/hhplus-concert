@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.payment.domain.entity;
+package kr.hhplus.be.server.reservation.domain.entity;
 
 import jakarta.persistence.*;
 import kr.hhplus.be.server.common.ReservationState;

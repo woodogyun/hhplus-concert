@@ -32,4 +32,7 @@ public interface QueueJPARepository extends JpaRepository<Queue, Long> {
     Optional<Queue> findByUuid(String uuid);
 
     boolean existsByUuid(String uuid);
+
+    void deleteByUserId(long userId);
+
 }

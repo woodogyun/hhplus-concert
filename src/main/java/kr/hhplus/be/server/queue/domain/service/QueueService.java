@@ -102,4 +102,8 @@ public class QueueService {
         return opt.orElseThrow(() -> new InvalidTokenException("Not found token"));
     }
 
+    @Transactional
+    public void delete(long userId) {
+        queueRepositoryImpl.deleteByUserId(userId);
+    }
 }

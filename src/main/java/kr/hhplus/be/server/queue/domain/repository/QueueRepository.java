@@ -18,4 +18,6 @@ public interface QueueRepository {
     Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId);
     Optional<Queue> findByUuid(String uuid);
     boolean existsByUuid(String uuid);
+
+    void deleteByUserId(long userId);
 }

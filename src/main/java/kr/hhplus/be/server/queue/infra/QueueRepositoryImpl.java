@@ -61,6 +61,11 @@ public class QueueRepositoryImpl implements QueueRepository {
     }
 
     @Override
+    public void deleteByUserId(long userId) {
+        queueJPARepository.deleteByUserId(userId);
+    }
+
+    @Override
     public void deleteAll(List<Queue> queues) {
         queueJPARepository.deleteAll(queues);
     }

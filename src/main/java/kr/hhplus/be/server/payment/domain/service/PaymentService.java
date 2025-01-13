@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.payment.domain.service;
 
+import kr.hhplus.be.server.payment.domain.entity.Payment;
+import kr.hhplus.be.server.payment.domain.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -7,19 +9,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentService {
 
-    /**
-     * 포인트 충전
-     */
-    public void charge(int amount) {}
+    private final PaymentRepository paymentRepository;
 
-    /**
-     * 포인트 조회
-     */
-    public void getPoint(long userId) {}
+    public void add(long userId, long reservationId, int amount) {
+        Payment payment = Payment.builder()
+                .userId(userId)
+                .amount(amount)
+                .reservationId(reservationId)
+                .build();
 
-    /**
-     * 구매
-     */
-    public void pay(long userId, long amount) {}
-
+        paymentRepository.save(payment);
+    }
 }

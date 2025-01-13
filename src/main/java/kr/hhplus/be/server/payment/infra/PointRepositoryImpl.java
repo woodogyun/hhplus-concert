@@ -1,8 +1,7 @@
-package kr.hhplus.be.server.user.infra;
+package kr.hhplus.be.server.payment.infra;
 
-import kr.hhplus.be.server.user.domain.entity.Point;
-import kr.hhplus.be.server.user.domain.repository.PointRepository;
-import kr.hhplus.be.server.user.infra.orm.PointJPARepository;
+import kr.hhplus.be.server.payment.domain.entity.Point;
+import kr.hhplus.be.server.payment.domain.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,9 @@
 package kr.hhplus.be.server.payment.domain.repository;
 
-import kr.hhplus.be.server.payment.domain.entity.Reservation;
+import kr.hhplus.be.server.payment.domain.entity.Payment;
 
 public interface PaymentRepository {
 
-    Reservation save(Reservation reservation);
+    Payment save(Payment payment);
 
 }

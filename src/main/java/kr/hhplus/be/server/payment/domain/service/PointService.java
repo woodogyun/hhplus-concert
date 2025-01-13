@@ -1,7 +1,7 @@
-package kr.hhplus.be.server.user.domain.service;
+package kr.hhplus.be.server.payment.domain.service;
 
-import kr.hhplus.be.server.user.domain.entity.Point;
-import kr.hhplus.be.server.user.infra.PointRepositoryImpl;
+import kr.hhplus.be.server.payment.domain.entity.Point;
+import kr.hhplus.be.server.payment.infra.PointRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,16 +12,22 @@ public class PointService {
 
     private final PointRepositoryImpl pointRepository;
 
-    public Point getBalance(Long userId) {
+    public Point getPoint(Long userId) {
         return pointRepository.findByUserId(userId);
     }
 
     @Transactional
-    public Long increase(Long userId, int value) {
+    public Long chargePoint(Long userId, int value) {
         Point point = pointRepository.findByUserId(userId);
         point.increase(value);
         pointRepository.save(point);
         return point.getValue();
     }
 
+    @Transactional
+    public void pay(long userId, int amount) {
+        Point point = pointRepository.findByUserId(userId);
+        point.decrease(amount);
+        pointRepository.save(point);
+    }
 }

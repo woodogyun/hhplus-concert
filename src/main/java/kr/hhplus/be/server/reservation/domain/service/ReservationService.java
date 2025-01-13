@@ -1,8 +1,8 @@
-package kr.hhplus.be.server.payment.domain.service;
+package kr.hhplus.be.server.reservation.domain.service;
 
 import kr.hhplus.be.server.common.ReservationState;
-import kr.hhplus.be.server.payment.domain.entity.Reservation;
-import kr.hhplus.be.server.payment.infra.ReservationRepositoryImpl;
+import kr.hhplus.be.server.reservation.domain.entity.Reservation;
+import kr.hhplus.be.server.reservation.infra.ReservationRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +26,9 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    public Long updateState(Long seatId) {
+        Reservation reservation = reservationRepository.findBySeatId(seatId);
+        reservation.setState(ReservationState.COMPLETED);
+        return reservationRepository.save(reservation).getId();
+    }
 }

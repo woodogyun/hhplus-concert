@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.queue.domain.entity;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.common.QueueState;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -29,8 +30,9 @@ public class Queue {
     @Column(name = "expires_at")
     private LocalDateTime expiresAt; // 만료 시간
 
-    @Column(nullable = false)
-    private String status; // 상태
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "state")
+    private QueueState state; // 상태
 
 //    @Column
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_seq")

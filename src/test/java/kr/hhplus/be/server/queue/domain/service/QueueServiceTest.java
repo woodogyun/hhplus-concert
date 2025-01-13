@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.queue.domain.service;
 
+import kr.hhplus.be.server.common.QueueState;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
@@ -36,7 +37,7 @@ public class QueueServiceTest {
             queue.setUserId(Integer.toUnsignedLong(i));
             queue.setUuid("uuid-" + i); // UUID는 고유하게 설정
             queue.setScheduleId(1L); // 고정된 scheduleId
-            queue.setStatus("INACTIVE");
+            queue.setState(QueueState.INACTIVE);
             queue.setExpiresAt(null); // INACTIVE 상태이므로 만료 시간 없음
             mockQueues.add(queue);
         }
@@ -56,7 +57,7 @@ public class QueueServiceTest {
         assertNotNull(generatedQueue);
         assertEquals(userId, generatedQueue.getUserId());
         assertEquals(scheduleId, generatedQueue.getScheduleId());
-        assertEquals("INACTIVE", generatedQueue.getStatus());
+        assertEquals(QueueState.INACTIVE, generatedQueue.getState());
         verify(queueRepository, times(1)).save(generatedQueue);
     }
 
@@ -67,7 +68,7 @@ public class QueueServiceTest {
         long scheduleId = 1L;
         Queue activeQueue = new Queue();
         activeQueue.setUuid(uuid);
-        activeQueue.setStatus("ACTIVE");
+        activeQueue.setState(QueueState.ACTIVE);
         when(queueRepository.findByUuidAndScheduleId(uuid, scheduleId)).thenReturn(Optional.of(activeQueue));
 
         // When: Queue 상태 조회 메서드 호출
@@ -85,10 +86,10 @@ public class QueueServiceTest {
         long scheduleId = 1L;
         Queue inactiveQueue = new Queue();
         inactiveQueue.setUuid(uuid);
-        inactiveQueue.setStatus("INACTIVE");
+        inactiveQueue.setState(QueueState.INACTIVE);
         inactiveQueue.setId(1L);
         when(queueRepository.findByUuidAndScheduleId(uuid, scheduleId)).thenReturn(Optional.of(inactiveQueue));
-        when(queueRepository.countByStatusAndIdLessThan("INACTIVE", inactiveQueue.getId())).thenReturn(5L);
+        when(queueRepository.countByStatusAndIdLessThan(QueueState.INACTIVE, inactiveQueue.getId())).thenReturn(5L);
 
         // When: Queue 상태 조회 메서드 호출
         TokenResponse response = queueService.getQueueStatus(uuid, scheduleId);
@@ -102,14 +103,14 @@ public class QueueServiceTest {
     @Test
     public void 활성_큐의_수량을_조회할_때_정확한_수량인지() {
         // Given: 활성 상태의 Queue 수 설정
-        when(queueRepository.countByStatus("ACTIVE")).thenReturn(10);
+        when(queueRepository.countByStatus(QueueState.ACTIVE)).thenReturn(10);
 
         // When: 활성 Queue 수 조회 메서드 호출
         int activeCount = queueService.countActiveQueues();
 
         // Then: 활성 Queue 수가 올바른지 검증
         assertEquals(10, activeCount);
-        verify(queueRepository, times(1)).countByStatus("ACTIVE");
+        verify(queueRepository, times(1)).countByStatus(QueueState.ACTIVE);
     }
 
     @Test

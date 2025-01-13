@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.domain.service;
 
-import kr.hhplus.be.server.common.QueueStatus;
+import kr.hhplus.be.server.common.QueueState;
 import kr.hhplus.be.server.common.error.InvalidTokenException;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
@@ -25,7 +25,7 @@ public class QueueService {
     public Queue generateQueue(Long scheduleId, Long userId) {
         // 기존 토큰 조회 후 제거
         String uuid = UUID.randomUUID().toString(); // UUID 생성
-        QueueStatus status = QueueStatus.INACTIVE; // 초기 상태를 INACTIVE 으로 설정
+        QueueState state = QueueState.INACTIVE; // 초기 상태를 INACTIVE 으로 설정
 
         Optional<Queue> opt = queueRepositoryImpl.findByScheduleIdAndUserId(userId, scheduleId);
         Queue queue = opt.orElseGet(() ->
@@ -33,7 +33,7 @@ public class QueueService {
                         .userId(userId)
                         .uuid(uuid)
                         .scheduleId(scheduleId)
-                        .status(status.name())
+                        .state(state)
                         .build()
         );
         // Queue 객체 생성 및 저장
@@ -47,12 +47,12 @@ public class QueueService {
                 .orElseThrow(() -> new RuntimeException("대기열을 찾을 수 없습니다.")); // UUID로 대기열 조회
 
         // 상태 값이 ACTIVE 인 경우
-        if (queue.getStatus().equals("ACTIVE")) {
+        if (queue.getState() == QueueState.ACTIVE) {
             return new TokenResponse(true);
         }
 
         // 대기 중인 인원 수
-        Long waitingCount = queueRepositoryImpl.countByStatusAndIdLessThan("INACTIVE", queue.getId());
+        Long waitingCount = queueRepositoryImpl.countByStatusAndIdLessThan(QueueState.INACTIVE, queue.getId());
 
         // TokenResponse 객체 생성 및 반환
         return new TokenResponse( waitingCount, false);
@@ -61,7 +61,7 @@ public class QueueService {
 
     // ACTIVE 상태의 대기열 수를 카운팅하는 메서드
     public int countActiveQueues() {
-        return queueRepositoryImpl.countByStatus("ACTIVE");
+        return queueRepositoryImpl.countByStatus(QueueState.ACTIVE);
     }
 
     // 대기열에 만료된 토큰 제거하는 메서드
@@ -86,9 +86,11 @@ public class QueueService {
     // 최신 순번을 변경하는 메서드
     @Transactional
     public int updateToken(List<Queue> queuesToUpdate, LocalDateTime expiresAt) {
+        QueueState state = QueueState.ACTIVE; // 초기 상태를 INACTIVE 으로 설정
+
         // 각 토큰의 상태와 만료 시간을 업데이트
         for (Queue queue : queuesToUpdate) {
-            queue.setStatus("ACTIVE");
+            queue.setState(state);
             queue.setExpiresAt(expiresAt);
         }
 

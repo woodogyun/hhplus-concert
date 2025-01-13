@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.queue.infra;
 
+import kr.hhplus.be.server.common.QueueState;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +37,12 @@ public class QueueRepositoryImpl implements QueueRepository {
     }
 
     @Override
-    public Long countByStatusAndIdLessThan(String status, Long id) {
+    public Long countByStatusAndIdLessThan(QueueState status, Long id) {
         return queueJPARepository.countByStatusAndIdLessThan(status, id);
     }
 
     @Override
-    public int countByStatus(String status) {
+    public int countByStatus(QueueState status) {
         return (int) queueJPARepository.countByStatus(status);
     }
 

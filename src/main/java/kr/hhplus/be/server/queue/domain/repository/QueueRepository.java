@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.queue.domain.repository;
 
+import kr.hhplus.be.server.common.QueueState;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import org.springframework.data.domain.Pageable;
 
@@ -12,9 +13,9 @@ public interface QueueRepository {
     void deleteAll(List<Queue> queues);
     Optional<Queue> findByScheduleIdAndUserId(Long userId, Long scheduleId);
     List<Queue> findExpiredTokens();
-    int countByStatus(String status);
+    int countByStatus(QueueState status);
     List<Queue> findTopNByInactive(Pageable pageable);
-    Long countByStatusAndIdLessThan(String status, Long id);
+    Long countByStatusAndIdLessThan(QueueState status, Long id);
     Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId);
     Optional<Queue> findByUuid(String uuid);
     boolean existsByUuid(String uuid);

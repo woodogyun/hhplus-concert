@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ConcertScheduleRepository {
 
-    List<ConcertSchedule> findAvailableConcertSchedules(long concertId, LocalDateTime currentDate);
+    List<ConcertSchedule> findAvailableConcertSchedules(long concertId);
 
 }

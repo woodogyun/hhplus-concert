@@ -35,4 +35,19 @@ public class Reservation {
     @Column(name = "expire_at")
     private LocalDateTime expireAt; // 만료 날짜
 
+    // 예약 상태를 변경하는 메서드
+    public void complete() {
+        this.state = ReservationState.COMPLETED;
+    }
+
+    // 예약을 생성하는 정적 메서드
+    public static Reservation create(Long seatId, Long price, Long userId, LocalDateTime expiresAt) {
+        return Reservation.builder()
+                .userId(userId)
+                .seatId(seatId)
+                .price(price)
+                .expireAt(expiresAt)
+                .state(ReservationState.IN_PROGRESS)
+                .build();
+    }
 }

@@ -10,7 +10,6 @@ import kr.hhplus.be.server.concert.domain.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +20,8 @@ public class ConcertFacade {
     private final ConcertScheduleService concertScheduleService;
     private final SeatService seatService;
 
-    public List<ConcertDateResponse> availableSeats(long concertId, LocalDateTime now) {
-        List<ConcertSchedule> scheduleList = concertScheduleService.availableSeats(concertId, now);
+    public List<ConcertDateResponse> availableSeats(long concertId) {
+        List<ConcertSchedule> scheduleList = concertScheduleService.availableSeats(concertId);
         return scheduleList.stream()
                 .map(schedule -> new ConcertDateResponse(
                         schedule.getId(), // scheduleId

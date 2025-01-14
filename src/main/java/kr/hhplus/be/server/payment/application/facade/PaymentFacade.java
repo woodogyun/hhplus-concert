@@ -18,7 +18,7 @@ public class PaymentFacade {
     private final ReservationService reservationService;
 
     @Transactional
-    public void processPayment(long seatId, long userId, int amount) {
+    public void processPayment(long seatId, long userId, long amount) {
         // 1. 유저 포인트 결제
         pointService.pay(userId, amount);
         // 2. Reservation 상태 변경

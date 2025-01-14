@@ -32,14 +32,14 @@ public class ConcertScheduleServiceTest {
         ConcertSchedule schedule2 = new ConcertSchedule();
         List<ConcertSchedule> expectedSchedules = List.of(schedule1, schedule2);
 
-        when(concertScheduleRepository.findAvailableConcertSchedules(concertId, currentDate))
+        when(concertScheduleRepository.findAvailableConcertSchedules(concertId))
                 .thenReturn(expectedSchedules);
 
         // When
-        List<ConcertSchedule> actualSchedules = concertScheduleService.availableSeats(concertId, currentDate);
+        List<ConcertSchedule> actualSchedules = concertScheduleService.availableSeats(concertId);
 
         // Then
         assertEquals(expectedSchedules, actualSchedules);
-        verify(concertScheduleRepository, times(1)).findAvailableConcertSchedules(concertId, currentDate); // 호출 검증
+        verify(concertScheduleRepository, times(1)).findAvailableConcertSchedules(concertId); // 호출 검증
     }
 }

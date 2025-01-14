@@ -20,9 +20,17 @@ public class Payment {
     private Long userId; // 사용자 ID
 
     @Column(name = "reservation_id", nullable = false)
-    private Long reservationId;
+    private Long reservationId; // 예약 ID
 
     @Column(name = "amount", nullable = false)
-    private Integer amount;
+    private Long amount; // 결제 금액
 
+    // 결제를 생성하는 정적 메서드
+    public static Payment create(Long userId, Long reservationId, Long amount) {
+        return Payment.builder()
+                .userId(userId)
+                .reservationId(reservationId)
+                .amount(amount)
+                .build();
+    }
 }

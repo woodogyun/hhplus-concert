@@ -25,7 +25,7 @@ public class PointService {
     }
 
     @Transactional
-    public void pay(long userId, int amount) {
+    public void pay(long userId, long amount) {
         Point point = pointRepository.findByUserId(userId);
         point.decrease(amount);
         pointRepository.save(point);

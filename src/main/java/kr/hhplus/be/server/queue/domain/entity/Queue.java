@@ -5,6 +5,8 @@ import kr.hhplus.be.server.common.QueueState;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -34,9 +36,36 @@ public class Queue {
     @Column(nullable = false, name = "state")
     private QueueState state; // 상태
 
-//    @Column
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "position_seq")
-//    @SequenceGenerator(name = "position_seq", sequenceName = "my_sequence", allocationSize = 1)
-//    private Long position; // 위치
+    // 정적 팩토리 메서드
+    public static Queue create(Long userId, Long scheduleId) {
+        String uuid = UUID.randomUUID().toString(); // UUID 생성
+        Queue queue = new Queue();
+        queue.setUserId(userId);
+        queue.setUuid(uuid);
+        queue.setScheduleId(scheduleId);
+        queue.setState(QueueState.INACTIVE); // 초기 상태를 INACTIVE로 설정
+        return queue;
+    }
+
+    // 상태를 변경하는 메서드
+    public void activate() {
+        this.state = QueueState.ACTIVE;
+    }
+
+    public void deactivate() {
+        this.state = QueueState.INACTIVE;
+    }
+
+    // 만료 시간을 설정하는 메서드
+    public void setExpiration(LocalDateTime expirationTime) {
+        this.expiresAt = expirationTime;
+    }
+
+    // 대기 중인 인원 수 계산 메서드
+    public static Long countWaiting(List<Queue> queues, Long currentId) {
+        return queues.stream()
+                .filter(queue -> queue.getState() == QueueState.INACTIVE && queue.getId() < currentId)
+                .count();
+    }
 
 }

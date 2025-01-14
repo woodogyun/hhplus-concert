@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,7 +25,7 @@ public class ConcertController {
     @Operation(summary = "콘서트 예약 가능 날짜")
     @GetMapping("/{concert-id}")
     public List<ConcertDateResponse> getAvailableDates(@PathVariable(value = "concert-id") long concertId) {
-        return concertFacade.availableSeats(concertId, LocalDateTime.now());
+        return concertFacade.availableSeats(concertId);
     }
     
     @Operation(summary = "좌석 조회")

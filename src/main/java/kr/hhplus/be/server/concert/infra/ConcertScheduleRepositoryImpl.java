@@ -17,8 +17,8 @@ public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository 
     private final ConcertScheduleJPARepository concertScheduleJPARepository;
 
     @Override
-    public List<ConcertSchedule> findAvailableConcertSchedules(long concertId, LocalDateTime currentDate) {
-        return concertScheduleJPARepository.findAvailableConcertSchedules(concertId, currentDate);
+    public List<ConcertSchedule> findAvailableConcertSchedules(long concertId) {
+        return concertScheduleJPARepository.findAvailableConcertSchedules(concertId, LocalDateTime.now());
     }
 
 }

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,20 +22,10 @@ public class QueueService {
     private final QueueRepositoryImpl queueRepositoryImpl;
 
     public Queue generateQueue(Long scheduleId, Long userId) {
-        // 기존 토큰 조회 후 제거
-        String uuid = UUID.randomUUID().toString(); // UUID 생성
-        QueueState state = QueueState.INACTIVE; // 초기 상태를 INACTIVE 으로 설정
+        Queue queue = queueRepositoryImpl.findByScheduleIdAndUserId(userId, scheduleId)
+                .orElseGet(() -> Queue.create(userId, scheduleId));
 
-        Optional<Queue> opt = queueRepositoryImpl.findByScheduleIdAndUserId(userId, scheduleId);
-        Queue queue = opt.orElseGet(() ->
-                Queue.builder()
-                        .userId(userId)
-                        .uuid(uuid)
-                        .scheduleId(scheduleId)
-                        .state(state)
-                        .build()
-        );
-        // Queue 객체 생성 및 저장
+        // Queue 객체 저장
         queueRepositoryImpl.save(queue);
         return queue;
     }
@@ -44,7 +33,7 @@ public class QueueService {
     public TokenResponse getQueueStatus(String uuid, Long scheduleId) {
         // UUID, scheduleId를 통한 대기열 상태 조회
         Queue queue = queueRepositoryImpl.findByUuidAndScheduleId(uuid, scheduleId)
-                .orElseThrow(() -> new RuntimeException("대기열을 찾을 수 없습니다.")); // UUID로 대기열 조회
+                .orElseThrow(() -> new RuntimeException("대기열을 찾을 수 없습니다."));
 
         // 상태 값이 ACTIVE 인 경우
         if (queue.getState() == QueueState.ACTIVE) {
@@ -55,43 +44,36 @@ public class QueueService {
         Long waitingCount = queueRepositoryImpl.countByStatusAndIdLessThan(QueueState.INACTIVE, queue.getId());
 
         // TokenResponse 객체 생성 및 반환
-        return new TokenResponse( waitingCount, false);
+        return new TokenResponse(waitingCount, false);
     }
 
-
-    // ACTIVE 상태의 대기열 수를 카운팅하는 메서드
     public int countActiveQueues() {
         return queueRepositoryImpl.countByStatus(QueueState.ACTIVE);
     }
 
-    // 대기열에 만료된 토큰 제거하는 메서드
     @Transactional
     public long deleteToken() {
-        List<Queue> expiredTokens = queueRepositoryImpl.findExpiredTokens(); // 만료된 토큰 조회
-        long count = expiredTokens.size(); // 제거할 토큰 수 계산
+        List<Queue> expiredTokens = queueRepositoryImpl.findExpiredTokens();
+        long count = expiredTokens.size();
 
-        if(count > 0) {
-            queueRepositoryImpl.deleteAll(expiredTokens); // 만료된 토큰 삭제
+        if (count > 0) {
+            queueRepositoryImpl.deleteAll(expiredTokens);
         }
 
-        return count; // 제거된 토큰 수 반환
+        return count;
     }
 
     public List<Queue> findTopNByInactive(long count) {
-        // 탑 N 개의 "INACTIVE" 상태 큐를 조회
-        Pageable pageable = PageRequest.of(0, (int) count); // 페이지 번호는 0부터 시작
+        Pageable pageable = PageRequest.of(0, (int) count);
         return queueRepositoryImpl.findTopNByInactive(pageable);
     }
 
-    // 최신 순번을 변경하는 메서드
     @Transactional
     public int updateToken(List<Queue> queuesToUpdate, LocalDateTime expiresAt) {
-        QueueState state = QueueState.ACTIVE; // 초기 상태를 INACTIVE 으로 설정
-
         // 각 토큰의 상태와 만료 시간을 업데이트
         for (Queue queue : queuesToUpdate) {
-            queue.setState(state);
-            queue.setExpiresAt(expiresAt);
+            queue.activate(); // 상태를 ACTIVE로 변경
+            queue.setExpiration(expiresAt); // 만료 시간 설정
         }
 
         // 변경 사항을 저장
@@ -99,7 +81,7 @@ public class QueueService {
         return list.size();
     }
 
-    public Queue getToken (String uuid) {
+    public Queue getToken(String uuid) {
         Optional<Queue> opt = queueRepositoryImpl.findByUuid(uuid);
         return opt.orElseThrow(() -> new InvalidTokenException("Not found token"));
     }

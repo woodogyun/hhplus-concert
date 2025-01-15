@@ -2,7 +2,7 @@ package kr.hhplus.be.server.concert.domain.service;
 
 import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.domain.entity.Seat;
-import kr.hhplus.be.server.concert.infra.SeatRepositoryImpl;
+import kr.hhplus.be.server.concert.domain.repository.SeatRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class SeatServiceTest {
 
     @Mock
-    private SeatRepositoryImpl seatRepository;
+    private SeatRepository seatRepository;
 
     @InjectMocks
     private SeatService seatService;

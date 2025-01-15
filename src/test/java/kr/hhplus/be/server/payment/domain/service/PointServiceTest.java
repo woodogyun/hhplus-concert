@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.payment.domain.service;
 
 import kr.hhplus.be.server.payment.domain.entity.Point;
-import kr.hhplus.be.server.payment.infra.PointRepositoryImpl;
+import kr.hhplus.be.server.payment.domain.repository.PointRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ public class PointServiceTest {
     private PointService pointService;
 
     @Mock
-    private PointRepositoryImpl pointRepository;
+    private PointRepository pointRepository;
 
     private Point point;
 

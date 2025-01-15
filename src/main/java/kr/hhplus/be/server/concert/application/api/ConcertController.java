@@ -7,6 +7,7 @@ import kr.hhplus.be.server.concert.application.dto.response.ConcertDateResponse;
 import kr.hhplus.be.server.concert.application.dto.response.SeatResponse;
 import kr.hhplus.be.server.concert.application.facade.ConcertFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,15 +25,15 @@ public class ConcertController {
 
     @Operation(summary = "콘서트 예약 가능 날짜")
     @GetMapping("/{concert-id}")
-    public List<ConcertDateResponse> getAvailableDates(@PathVariable(value = "concert-id") long concertId) {
-        return concertFacade.availableSeats(concertId);
+    public ResponseEntity<List<ConcertDateResponse>> getAvailableDates(@PathVariable(value = "concert-id") long concertId) {
+        return ResponseEntity.ok().body(concertFacade.availableSeats(concertId));
     }
     
     @Operation(summary = "좌석 조회")
     @GetMapping("/{schedule-id}/seat")
-    public List<SeatResponse> getSeats(@PathVariable(value = "schedule-id") long scheduleId) {
+    public ResponseEntity<List<SeatResponse>> getSeats(@PathVariable(value = "schedule-id") long scheduleId) {
         SeatState seatState = SeatState.AVAILABLE;
-        return concertFacade.getSeats(scheduleId, seatState);
+        return ResponseEntity.ok().body(concertFacade.getSeats(scheduleId, seatState));
     }
 
 }

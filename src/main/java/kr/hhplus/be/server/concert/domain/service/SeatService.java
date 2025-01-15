@@ -2,7 +2,7 @@ package kr.hhplus.be.server.concert.domain.service;
 
 import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.domain.entity.Seat;
-import kr.hhplus.be.server.concert.infra.SeatRepositoryImpl;
+import kr.hhplus.be.server.concert.domain.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class SeatService {
 
-    private final SeatRepositoryImpl seatRepository;
+    private final SeatRepository seatRepository;
 
     // scheduleId를 받아 좌석 정보 조회
     public List<Seat> getSeats(long scheduleId, SeatState seatStatus) {

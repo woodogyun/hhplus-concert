@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.queue.domain.service;
 
 import kr.hhplus.be.server.common.QueueState;
-import kr.hhplus.be.server.common.error.InvalidTokenException;
+import kr.hhplus.be.server.common.exception.InvalidTokenException;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;

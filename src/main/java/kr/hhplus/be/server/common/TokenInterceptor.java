@@ -2,7 +2,7 @@ package kr.hhplus.be.server.common;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.hhplus.be.server.common.error.InvalidTokenException;
+import kr.hhplus.be.server.common.exception.InvalidTokenException;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

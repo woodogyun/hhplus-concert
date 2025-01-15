@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.payment.domain.service;
 
 import kr.hhplus.be.server.payment.domain.entity.Payment;
-import kr.hhplus.be.server.payment.infra.PaymentRepositoryImpl;
+import kr.hhplus.be.server.payment.domain.repository.PaymentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ public class PaymentServiceTest {
     private PaymentService paymentService;
 
     @Mock
-    private PaymentRepositoryImpl paymentRepositoryImpl;
+    private PaymentRepository paymentRepository;
 
     @Test
     public void testAdd() {
@@ -33,6 +33,6 @@ public class PaymentServiceTest {
                 .reservationId(reservationId)
                 .build();
 
-        verify(paymentRepositoryImpl).save(expectedPayment);
+        verify(paymentRepository).save(expectedPayment);
     }
 }

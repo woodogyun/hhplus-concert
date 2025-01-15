@@ -28,9 +28,9 @@ public class QueueController {
     // TODO: scheduleId로 조회하도록 수정되어야함
     @Operation(summary = "대기열 순번 조회")
     @GetMapping("/{schedule-id}/status")
-    public TokenResponse getQueueStatus(@RequestHeader("x-token") String uuid, @PathVariable("sche0dule-id")Long scheduleId) {
+    public ResponseEntity<TokenResponse> getQueueStatus(@RequestHeader("x-token") String uuid, @PathVariable("sche0dule-id")Long scheduleId) {
         //scheduleId
-         return queueService.getQueueStatus(uuid, scheduleId);
+         return ResponseEntity.ok(queueService.getQueueStatus(uuid, scheduleId));
     }
 
     @PostMapping("/token")

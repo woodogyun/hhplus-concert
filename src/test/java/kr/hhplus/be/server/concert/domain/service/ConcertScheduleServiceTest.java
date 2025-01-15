@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.concert.domain.service;
 
 import kr.hhplus.be.server.concert.domain.entity.ConcertSchedule;
-import kr.hhplus.be.server.concert.infra.ConcertScheduleRepositoryImpl;
+import kr.hhplus.be.server.concert.domain.repository.ConcertScheduleRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ public class ConcertScheduleServiceTest {
     private ConcertScheduleService concertScheduleService;
 
     @Mock
-    private ConcertScheduleRepositoryImpl concertScheduleRepository;
+    private ConcertScheduleRepository concertScheduleRepository;
 
     @Test
     public void testAvailableSeats() {
@@ -32,7 +32,7 @@ public class ConcertScheduleServiceTest {
         ConcertSchedule schedule2 = new ConcertSchedule();
         List<ConcertSchedule> expectedSchedules = List.of(schedule1, schedule2);
 
-        when(concertScheduleRepository.findAvailableConcertSchedules(concertId))
+        when(concertScheduleRepository.findAvailableConcertSchedules(concertId, currentDate))
                 .thenReturn(expectedSchedules);
 
         // When
@@ -40,6 +40,6 @@ public class ConcertScheduleServiceTest {
 
         // Then
         assertEquals(expectedSchedules, actualSchedules);
-        verify(concertScheduleRepository, times(1)).findAvailableConcertSchedules(concertId); // 호출 검증
+        verify(concertScheduleRepository, times(1)).findAvailableConcertSchedules(concertId, currentDate); // 호출 검증
     }
 }

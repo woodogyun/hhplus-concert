@@ -1,8 +1,8 @@
 package kr.hhplus.be.server.common;
 
 
-import kr.hhplus.be.server.common.error.InvalidTokenException;
-import kr.hhplus.be.server.common.error.SeatUnavailableException;
+import kr.hhplus.be.server.common.exception.InvalidTokenException;
+import kr.hhplus.be.server.common.exception.SeatUnavailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

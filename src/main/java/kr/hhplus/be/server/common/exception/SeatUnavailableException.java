@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.common.error;
+package kr.hhplus.be.server.common.exception;
 
 public class SeatUnavailableException extends RuntimeException {
 

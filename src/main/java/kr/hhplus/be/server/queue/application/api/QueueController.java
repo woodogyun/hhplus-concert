@@ -2,6 +2,7 @@ package kr.hhplus.be.server.queue.application.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.hhplus.be.server.common.annotation.ApiLog;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.domain.service.QueueService;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/queue")
 @Tag(name = "대기열 API", description = "대기열 API")
 @RequiredArgsConstructor
+@ApiLog
 public class QueueController {
 
     private final QueueService queueService;

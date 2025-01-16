@@ -2,6 +2,7 @@ package kr.hhplus.be.server.reservation.application.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.hhplus.be.server.common.annotation.ApiLog;
 import kr.hhplus.be.server.reservation.application.dto.ReservationResponse;
 import kr.hhplus.be.server.reservation.application.facade.ReservationFacade;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/reservation")
 @RequiredArgsConstructor
 @Tag(name = "결제 API", description = "결제 API")
+@ApiLog
 public class ReservationController {
 
     private final ReservationFacade reservationFacade;

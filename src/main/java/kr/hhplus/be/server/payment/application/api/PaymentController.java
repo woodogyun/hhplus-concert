@@ -2,6 +2,7 @@ package kr.hhplus.be.server.payment.application.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.hhplus.be.server.common.annotation.ApiLog;
 import kr.hhplus.be.server.payment.application.dto.PaymentRequest;
 import kr.hhplus.be.server.payment.application.dto.PaymentResponse;
 import kr.hhplus.be.server.payment.application.dto.PointResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
 @Tag(name = "결제 API", description = "결제 API")
+@ApiLog
 public class PaymentController {
 
     private final PaymentFacade paymentFacade;

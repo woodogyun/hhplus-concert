@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class TokenInterceptor implements HandlerInterceptor {
 
-    private QueueRepositoryImpl queueRepository;
+    final private QueueRepositoryImpl queueRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -22,7 +22,6 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (!queueRepository.existsByUuid(uuid)) {
             throw new TokenException(ErrorCode.EXPIRED_TOKEN);
         }
-
         return true; // 컨트롤러로의 접근을 허용합니다.
     }
 }

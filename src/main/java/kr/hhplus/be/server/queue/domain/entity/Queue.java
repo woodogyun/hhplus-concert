@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.queue.domain.entity;
 
 import jakarta.persistence.*;
-import kr.hhplus.be.server.common.QueueState;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -26,8 +25,8 @@ public class Queue {
     @Column(nullable = false, unique = true, name = "uuid")
     private String uuid; // UUID
 
-    @Column(nullable = false, name = "schedule_id")
-    private Long scheduleId; // 스케줄 ID
+    @Column(nullable = false, name = "concert_id")
+    private Long concertId; // 콘서트 ID
 
     @Column(name = "expires_at")
     private LocalDateTime expiresAt; // 만료 시간
@@ -37,12 +36,12 @@ public class Queue {
     private QueueState state; // 상태
 
     // 정적 팩토리 메서드
-    public static Queue create(Long userId, Long scheduleId) {
+    public static Queue create(Long userId, Long concertId) {
         String uuid = UUID.randomUUID().toString(); // UUID 생성
         Queue queue = new Queue();
         queue.setUserId(userId);
         queue.setUuid(uuid);
-        queue.setScheduleId(scheduleId);
+        queue.setConcertId(concertId);
         queue.setState(QueueState.INACTIVE); // 초기 상태를 INACTIVE로 설정
         return queue;
     }

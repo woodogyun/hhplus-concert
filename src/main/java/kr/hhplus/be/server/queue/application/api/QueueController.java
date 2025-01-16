@@ -3,9 +3,10 @@ package kr.hhplus.be.server.queue.application.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.common.annotation.ApiLog;
+import kr.hhplus.be.server.queue.application.dto.TokenRequest;
+import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.domain.service.QueueService;
-import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,23 +28,20 @@ public class QueueController {
      * @param uuid
      * @return
      */
-    // TODO: scheduleId로 조회하도록 수정되어야함
-    @Operation(summary = "대기열 순번 조회")
-    @GetMapping("/{schedule-id}/status")
-    public ResponseEntity<TokenResponse> getQueueStatus(@RequestHeader("x-token") String uuid, @PathVariable("sche0dule-id")Long scheduleId) {
-        //scheduleId
-         return ResponseEntity.ok(queueService.getQueueStatus(uuid, scheduleId));
+    @Operation(summary = "콘서트 대기열 순번 조회")
+    @GetMapping("/{concert-id}/status")
+    public ResponseEntity<TokenResponse> getQueueStatus(@RequestHeader("x-token") String uuid, @PathVariable("concert-id")Long concertId) {
+         return ResponseEntity.ok(queueService.getQueueStatus(uuid, concertId));
     }
 
     @PostMapping("/token")
     @Operation(summary = "토큰 생성")
-    public ResponseEntity<Queue> generateToken() {
-
-        Long scheduleId = 1L; // 하드코딩된 scheduleId 생성
-        Long userId = 1L;     // 하드코딩된 userId 생성
+    public ResponseEntity<Queue> generateToken(@RequestBody TokenRequest tokenRequest) {
+        Long concertId = tokenRequest.getConcertId();
+        Long userId = tokenRequest.getUserId();
 
         // Queue 객체 생성
-        Queue queue = queueService.generateQueue(scheduleId, userId);
+        Queue queue = queueService.generateQueue(concertId, userId);
 
         // x-token 헤더에 UUID 추가
         HttpHeaders headers = new HttpHeaders();

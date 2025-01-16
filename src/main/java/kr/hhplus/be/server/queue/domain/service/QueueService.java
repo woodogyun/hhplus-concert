@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.domain.service;
 
-import kr.hhplus.be.server.common.QueueState;
+import kr.hhplus.be.server.queue.domain.entity.QueueState;
 import kr.hhplus.be.server.common.exception.InvalidTokenException;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
@@ -21,18 +21,18 @@ public class QueueService {
 
     private final QueueRepositoryImpl queueRepositoryImpl;
 
-    public Queue generateQueue(Long scheduleId, Long userId) {
-        Queue queue = queueRepositoryImpl.findByScheduleIdAndUserId(userId, scheduleId)
-                .orElseGet(() -> Queue.create(userId, scheduleId));
+    public Queue generateQueue(Long concertId, Long userId) {
+        Queue queue = queueRepositoryImpl.findByConcertIdAndUserId(userId, concertId)
+                .orElseGet(() -> Queue.create(userId, concertId));
 
         // Queue 객체 저장
         queueRepositoryImpl.save(queue);
         return queue;
     }
 
-    public TokenResponse getQueueStatus(String uuid, Long scheduleId) {
+    public TokenResponse getQueueStatus(String uuid, Long concertId) {
         // UUID, scheduleId를 통한 대기열 상태 조회
-        Queue queue = queueRepositoryImpl.findByUuidAndScheduleId(uuid, scheduleId)
+        Queue queue = queueRepositoryImpl.findByUuidAndConcertId(uuid, concertId)
                 .orElseThrow(() -> new RuntimeException("대기열을 찾을 수 없습니다."));
 
         // 상태 값이 ACTIVE 인 경우

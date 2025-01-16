@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.common;
+package kr.hhplus.be.server.concert.domain.entity;
 
 public enum SeatState {
     AVAILABLE,  // 예약 가능 상태

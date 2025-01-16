@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.concert.domain.service;
 
-import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.concert.domain.entity.SeatState;
 import kr.hhplus.be.server.concert.domain.dto.SeatResult;
 import kr.hhplus.be.server.concert.domain.entity.Seat;
 import kr.hhplus.be.server.concert.domain.repository.SeatRepository;

@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.concert.domain.service;
 
-import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.common.exception.SeatException;
+import kr.hhplus.be.server.concert.domain.entity.SeatState;
 import kr.hhplus.be.server.concert.domain.dto.SeatResult;
 import kr.hhplus.be.server.concert.domain.entity.Seat;
 import kr.hhplus.be.server.concert.domain.repository.SeatRepository;
@@ -29,9 +31,15 @@ public class SeatService {
     @Transactional
     public SeatResult reserveSeat(long seatId) {
         Optional<Seat> opt = seatRepository.findByIdAndState(seatId, SeatState.AVAILABLE);
-        Seat seat = opt.orElseThrow(() -> new RuntimeException("Seat not found"));
-        seat.setState(SeatState.UNAVAILABLE);
+        Seat seat = opt.orElseThrow(() -> new SeatException(ErrorCode.NOT_FOUNT_SEAT));
+        seat.reserve();
         Seat savedSeat = seatRepository.save(seat);
         return SeatResult.fromEntity(savedSeat); // fromEntity 메소드 사용
+    }
+    
+    // 예약 만료 시 좌석 상태 예약 가능하도록 변경
+    public void makeSeatAvailable(Long seatId) {
+        Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new SeatException(ErrorCode.SEAT_NOT_UNAVAILABLE));
+        seat.makeAvailable();
     }
 }

@@ -1,9 +1,10 @@
 package kr.hhplus.be.server.queue.domain.service;
 
-import kr.hhplus.be.server.queue.domain.entity.QueueState;
-import kr.hhplus.be.server.common.exception.InvalidTokenException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.common.exception.TokenException;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
+import kr.hhplus.be.server.queue.domain.entity.QueueState;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +34,7 @@ public class QueueService {
     public TokenResponse getQueueStatus(String uuid, Long concertId) {
         // UUID, scheduleId를 통한 대기열 상태 조회
         Queue queue = queueRepositoryImpl.findByUuidAndConcertId(uuid, concertId)
-                .orElseThrow(() -> new RuntimeException("대기열을 찾을 수 없습니다."));
+                .orElseThrow(() -> new TokenException(ErrorCode.NOT_FOUNT_TOKEN));
 
         // 상태 값이 ACTIVE 인 경우
         if (queue.getState() == QueueState.ACTIVE) {
@@ -83,7 +84,7 @@ public class QueueService {
 
     public Queue getToken(String uuid) {
         Optional<Queue> opt = queueRepositoryImpl.findByUuid(uuid);
-        return opt.orElseThrow(() -> new InvalidTokenException("Not found token"));
+        return opt.orElseThrow(() -> new TokenException(ErrorCode.NOT_FOUNT_TOKEN));
     }
 
     @Transactional

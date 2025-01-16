@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.payment.domain.entity;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.common.exception.PointException;
 import lombok.*;
 
 @Getter
@@ -8,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "reservation")
+@Table(name = "point")
 @Builder
 public class Point {
 
@@ -24,14 +26,14 @@ public class Point {
 
     public void decrease(long value) {
         if (this.value < value) {
-            throw new IllegalArgumentException("잘못된 포인트 값 입니다.");
+            throw new PointException(ErrorCode.INSUFFICIENT_POINTS);
         }
         this.value -= value;
     }
 
     public void increase(long value) {
         if (value <= 0) {
-            throw new IllegalArgumentException("잘못된 포인트 값 입니다.");
+            throw new PointException(ErrorCode.INVALID_POINT_VALUE);
         }
         this.value += value;
     }

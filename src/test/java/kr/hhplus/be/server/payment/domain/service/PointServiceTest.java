@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.payment.domain.service;
 
+import kr.hhplus.be.server.payment.domain.dto.PointResult;
 import kr.hhplus.be.server.payment.domain.entity.Point;
 import kr.hhplus.be.server.payment.domain.repository.PointRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,9 +35,9 @@ public class PointServiceTest {
         Long userId = 1L;
         when(pointRepository.findByUserId(userId)).thenReturn(point);
 
-        Point result = pointService.getPoint(userId);
+        PointResult result = pointService.getPoint(userId);
 
-        assertEquals(point, result);
+        assertEquals(point.getUserId(), result.getUserId());
         verify(pointRepository, times(1)).findByUserId(userId);
     }
 

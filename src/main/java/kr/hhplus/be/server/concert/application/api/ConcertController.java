@@ -2,7 +2,7 @@ package kr.hhplus.be.server.concert.application.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.concert.domain.entity.SeatState;
 import kr.hhplus.be.server.common.annotation.ApiLog;
 import kr.hhplus.be.server.concert.application.dto.response.ConcertDateResponse;
 import kr.hhplus.be.server.concert.application.dto.response.SeatResponse;

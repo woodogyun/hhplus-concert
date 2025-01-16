@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.common;
+package kr.hhplus.be.server.reservation.domain.entity;
 
 public enum ReservationState {
     IN_PROGRESS, // 예약중 상태

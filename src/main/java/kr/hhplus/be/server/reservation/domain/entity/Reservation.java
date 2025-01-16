@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.reservation.domain.entity;
 
 import jakarta.persistence.*;
-import kr.hhplus.be.server.common.ReservationState;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -39,6 +38,11 @@ public class Reservation {
     public void complete() {
         this.state = ReservationState.COMPLETED;
     }
+
+    public void expire() {
+        this.state = ReservationState.EXPIRED;
+    }
+
 
     // 예약을 생성하는 정적 메서드
     public static Reservation create(Long seatId, Long price, Long userId, LocalDateTime expiresAt) {

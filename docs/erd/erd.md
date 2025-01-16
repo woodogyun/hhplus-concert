@@ -47,23 +47,18 @@ erDiagram
         int seat_id FK
     }
 
-    TOKEN {
+    QUEUE {
         int id PK
         int user_id FK
         int concert_id FK
         datetime expired_at
     }
 
-    QUEUE {
-        int id PK
-        int token_id FK
-    }
-
     USER ||--o{ POINT : ""
     USER ||--o{ SEAT : ""
     USER ||--o{ RESERVATION : ""
     USER ||--o{ PAYMENT : ""
-    USER ||--o{ TOKEN : ""
+    USER ||--o{ QUEUE : ""
 
     CONCERT ||--o{ CONCERT_SCHEDULE : ""
 
@@ -72,5 +67,4 @@ erDiagram
     SEAT ||--o{ RESERVATION : ""
     SEAT ||--o{ PAYMENT : ""
 
-    TOKEN ||--o{ QUEUE : ""
 ```

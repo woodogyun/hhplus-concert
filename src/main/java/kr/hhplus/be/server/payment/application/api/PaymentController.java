@@ -6,7 +6,6 @@ import kr.hhplus.be.server.payment.application.dto.PaymentRequest;
 import kr.hhplus.be.server.payment.application.dto.PaymentResponse;
 import kr.hhplus.be.server.payment.application.dto.PointResponse;
 import kr.hhplus.be.server.payment.application.facade.PaymentFacade;
-import kr.hhplus.be.server.payment.domain.entity.Point;
 import kr.hhplus.be.server.payment.domain.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +22,14 @@ public class PaymentController {
 
     @Operation(summary = "포인트 조회")
     @GetMapping("/{user-id}/point")
-    public PointResponse getPoint(@PathVariable(value = "user-id") Long userId) {
-        Point point = pointService.getPoint(userId);
-        return new PointResponse(point.getValue());
+    public ResponseEntity<PointResponse> getPoint(@PathVariable(value = "user-id") Long userId) {
+        return ResponseEntity.ok().body(paymentFacade.getPoint(userId));
     }
 
     @Operation(summary = "포인트 충전")
     @PostMapping("/{user-id}/point/charge")
-    public PointResponse pointCharge(@PathVariable(value = "user-id") Long userId, @RequestBody int value) {
-        Long amount = pointService.chargePoint(userId, value);
-        return new PointResponse(amount);
+    public ResponseEntity<PointResponse> pointCharge(@PathVariable(value = "user-id") Long userId, @RequestBody int value) {
+        return ResponseEntity.ok().body(paymentFacade.chargePoint(userId, value));
     }
 
     @Operation(summary = "좌석 결제")

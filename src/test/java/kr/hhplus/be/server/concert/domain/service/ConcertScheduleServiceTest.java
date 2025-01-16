@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.concert.domain.service;
 
+import kr.hhplus.be.server.concert.domain.dto.ConcertScheduleResult;
 import kr.hhplus.be.server.concert.domain.entity.ConcertSchedule;
 import kr.hhplus.be.server.concert.domain.repository.ConcertScheduleRepository;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ public class ConcertScheduleServiceTest {
                 .thenReturn(expectedSchedules);
 
         // When
-        List<ConcertSchedule> actualSchedules = concertScheduleService.availableSeats(concertId);
+        List<ConcertScheduleResult> actualSchedules = concertScheduleService.availableSeats(concertId);
 
         // Then
         assertEquals(expectedSchedules, actualSchedules);

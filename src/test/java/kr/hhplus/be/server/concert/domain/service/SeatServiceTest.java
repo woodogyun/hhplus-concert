@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.concert.domain.service;
 
 import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.concert.domain.dto.SeatResult;
 import kr.hhplus.be.server.concert.domain.entity.Seat;
 import kr.hhplus.be.server.concert.domain.repository.SeatRepository;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,7 @@ public class SeatServiceTest {
                 .thenReturn(Arrays.asList(seat1, seat2));
 
         // When
-        List<Seat> seats = seatService.getSeats(scheduleId, seatStatus);
+        List<SeatResult> seats = seatService.getSeats(scheduleId, seatStatus);
 
         // Then
         assertEquals(2, seats.size());
@@ -66,7 +67,7 @@ public class SeatServiceTest {
         when(seatRepository.save(seat)).thenReturn(seat);
 
         // When
-        Seat reservedSeat = seatService.reserveSeat(seatId);
+        SeatResult reservedSeat = seatService.reserveSeat(seatId);
 
         // Then
         assertEquals(SeatState.UNAVAILABLE, reservedSeat.getState());

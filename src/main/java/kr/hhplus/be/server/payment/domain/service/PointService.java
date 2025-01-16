@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.payment.domain.service;
 
+import kr.hhplus.be.server.payment.domain.dto.PointResult;
 import kr.hhplus.be.server.payment.domain.entity.Point;
 import kr.hhplus.be.server.payment.domain.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,9 @@ public class PointService {
 
     private final PointRepository pointRepository;
 
-    public Point getPoint(Long userId) {
-        return pointRepository.findByUserId(userId);
+    public PointResult getPoint(Long userId) {
+        Point point = pointRepository.findByUserId(userId);
+        return PointResult.fromEntity(point);
     }
 
     @Transactional

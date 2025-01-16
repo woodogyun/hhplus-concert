@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.payment.application.facade;
 
+import kr.hhplus.be.server.payment.application.dto.PointResponse;
+import kr.hhplus.be.server.payment.domain.dto.PointResult;
 import kr.hhplus.be.server.payment.domain.service.PaymentService;
 import kr.hhplus.be.server.payment.domain.service.PointService;
 import kr.hhplus.be.server.queue.domain.service.QueueService;
@@ -27,5 +29,16 @@ public class PaymentFacade {
         paymentService.add(userId, reservationId, amount);
         // 4. token 제거
         queueService.delete(userId);
+    }
+
+    public PointResponse getPoint(Long userId) {
+        PointResult point = pointService.getPoint(userId);
+        return new PointResponse(point.getPoint());
+    }
+
+    @Transactional
+    public PointResponse chargePoint(Long userId, int value) {
+        Long point = pointService.chargePoint(userId, value);
+        return new PointResponse(point);
     }
 }

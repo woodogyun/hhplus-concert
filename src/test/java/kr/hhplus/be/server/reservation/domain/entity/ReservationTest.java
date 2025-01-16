@@ -1,11 +1,11 @@
 package kr.hhplus.be.server.reservation.domain.entity;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReservationTest {
 
@@ -41,6 +41,10 @@ public class ReservationTest {
     @Test
     public void testInvalidStateChange() {
         reservation.complete();
+        assertThat(reservation.getState()).isEqualTo(ReservationState.COMPLETED);
+
+        // 이미 COMPLETED 상태에서 다시 complete()를 호출하는 경우
+        reservation.complete(); // 이 호출은 상태를 변경하지 않음
         assertThat(reservation.getState()).isEqualTo(ReservationState.COMPLETED);
     }
 }

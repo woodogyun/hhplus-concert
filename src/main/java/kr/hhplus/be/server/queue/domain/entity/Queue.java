@@ -61,9 +61,9 @@ public class Queue {
     }
 
     // 대기 중인 인원 수 계산 메서드
-    public static Long countWaiting(List<Queue> queues, Long currentId) {
+    public static Long countWaiting(List<Queue> queues, Long someCondition) {
         return queues.stream()
-                .filter(queue -> queue.getState() == QueueState.INACTIVE && queue.getId() < currentId)
+                .filter(queue -> queue.getState().equals(QueueState.INACTIVE)) // 대기 중인 큐 필터링
                 .count();
     }
 

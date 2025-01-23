@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.common.log;
+package kr.hhplus.be.server.common.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

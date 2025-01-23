@@ -45,6 +45,9 @@ dependencies {
 	implementation("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 
+	// redisson
+	implementation("org.redisson:redisson:3.42.0")
+
 	// Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")

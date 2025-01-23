@@ -1,11 +1,13 @@
 package kr.hhplus.be.server.reservation.domain.service;
 
 import kr.hhplus.be.server.reservation.domain.entity.Reservation;
+import kr.hhplus.be.server.reservation.domain.entity.ReservationState;
 import kr.hhplus.be.server.reservation.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,15 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findBySeatId(seatId);
         reservation.complete();
         return reservationRepository.save(reservation).getId();
+    }
+
+    public List<Reservation> findExpiredReservations() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return reservationRepository.findExpiredReservations(ReservationState.IN_PROGRESS, currentTime);
+    }
+
+    public void expireReservation(Reservation reservation) {
+        reservation.expire();
     }
 }
 

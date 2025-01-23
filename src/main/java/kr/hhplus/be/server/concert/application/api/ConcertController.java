@@ -2,7 +2,8 @@ package kr.hhplus.be.server.concert.application.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.concert.domain.entity.SeatState;
+import kr.hhplus.be.server.common.annotation.ApiLog;
 import kr.hhplus.be.server.concert.application.dto.response.ConcertDateResponse;
 import kr.hhplus.be.server.concert.application.dto.response.SeatResponse;
 import kr.hhplus.be.server.concert.application.facade.ConcertFacade;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/concert")
 @RequiredArgsConstructor
 @Tag(name = "콘서트 API", description = "콘서트 API")
+@ApiLog
 public class ConcertController {
 
     private final ConcertFacade concertFacade;

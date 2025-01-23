@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.infra;
 
-import kr.hhplus.be.server.common.QueueState;
+import kr.hhplus.be.server.queue.domain.entity.QueueState;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ public class QueueRepositoryImpl implements QueueRepository {
     }
 
     @Override
-    public Optional<Queue> findByScheduleIdAndUserId(Long userId, Long scheduleId) {
-        return queueJPARepository.findByScheduleIdAndUserId(userId, scheduleId);
+    public Optional<Queue> findByConcertIdAndUserId(Long userId, Long concertId) {
+        return queueJPARepository.findByConcertIdAndUserId(userId, concertId);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class QueueRepositoryImpl implements QueueRepository {
     }
 
     @Override
-    public Optional<Queue> findByUuidAndScheduleId(String uuid, Long scheduleId) {
-        return queueJPARepository.findByUuidAndScheduleId(uuid, scheduleId);
+    public Optional<Queue> findByUuidAndConcertId(String uuid, Long concertId) {
+        return queueJPARepository.findByUuidAndConcertId(uuid, concertId);
     }
 
     @Override

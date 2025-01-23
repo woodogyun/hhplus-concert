@@ -1,10 +1,10 @@
 package kr.hhplus.be.server.concert.application.facade;
 
-import kr.hhplus.be.server.common.SeatState;
 import kr.hhplus.be.server.concert.application.dto.response.ConcertDateResponse;
 import kr.hhplus.be.server.concert.application.dto.response.SeatResponse;
 import kr.hhplus.be.server.concert.domain.dto.ConcertScheduleResult;
 import kr.hhplus.be.server.concert.domain.dto.SeatResult;
+import kr.hhplus.be.server.concert.domain.entity.SeatState;
 import kr.hhplus.be.server.concert.domain.service.ConcertScheduleService;
 import kr.hhplus.be.server.concert.domain.service.SeatService;
 import lombok.RequiredArgsConstructor;

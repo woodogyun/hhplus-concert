@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.concert.domain.dto;
 
-import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.concert.domain.entity.SeatState;
 import kr.hhplus.be.server.concert.domain.entity.Seat;
 import lombok.Getter;
 

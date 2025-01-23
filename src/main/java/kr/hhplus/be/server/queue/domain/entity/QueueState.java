@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.common;
+package kr.hhplus.be.server.queue.domain.entity;
 
 public enum QueueState {
     INACTIVE,    // 대기 상태

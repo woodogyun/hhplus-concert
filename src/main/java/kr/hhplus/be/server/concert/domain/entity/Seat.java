@@ -1,7 +1,8 @@
 package kr.hhplus.be.server.concert.domain.entity;
 
 import jakarta.persistence.*;
-import kr.hhplus.be.server.common.SeatState;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.common.exception.SeatReservationException;
 import lombok.*;
 
 @Getter
@@ -30,9 +31,18 @@ public class Seat {
     @Column(nullable = false)
     private SeatState state; // 좌석 상태
 
-    /*
-    @ManyToOne
-    @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
-    private ConcertSchedule concertSchedule;
-    */
+    public void reserve() {
+        if (this.state != SeatState.AVAILABLE) {
+            throw new SeatReservationException(ErrorCode.SEAT_NOT_AVAILABLE);
+        }
+        this.state = SeatState.UNAVAILABLE;
+    }
+
+    public void makeAvailable() {
+        if (this.state != SeatState.UNAVAILABLE) {
+            throw new SeatReservationException(ErrorCode.SEAT_NOT_UNAVAILABLE);
+        }
+        this.state = SeatState.AVAILABLE;
+    }
+
 }

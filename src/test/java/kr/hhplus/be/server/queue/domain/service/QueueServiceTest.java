@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.queue.domain.service;
 
-import kr.hhplus.be.server.common.QueueState;
+import kr.hhplus.be.server.queue.domain.entity.QueueState;
 import kr.hhplus.be.server.queue.application.dto.TokenResponse;
 import kr.hhplus.be.server.queue.domain.entity.Queue;
 import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
@@ -36,7 +36,7 @@ public class QueueServiceTest {
             Queue queue = new Queue();
             queue.setUserId(Integer.toUnsignedLong(i));
             queue.setUuid("uuid-" + i); // UUID는 고유하게 설정
-            queue.setScheduleId(1L); // 고정된 scheduleId
+            queue.setConcertId(1L); // 고정된 scheduleId
             queue.setState(QueueState.INACTIVE);
             queue.setExpiresAt(null); // INACTIVE 상태이므로 만료 시간 없음
             mockQueues.add(queue);
@@ -45,18 +45,18 @@ public class QueueServiceTest {
 
     @Test
     public void 주어진_사용자와_큐를_생성할_때_생성된_큐가_올바른지() {
-        // Given: 새로운 Queue를 생성할 사용자 ID와 스케줄 ID 설정
-        Long scheduleId = 1L;
+        // Given: 새로운 Queue를 생성할 사용자 ID와 콘서트 ID 설정
+        Long concertId = 1L;
         Long userId = 1L;
-        when(queueRepository.findByScheduleIdAndUserId(userId, scheduleId)).thenReturn(Optional.empty());
+        when(queueRepository.findByConcertIdAndUserId(userId, concertId)).thenReturn(Optional.empty());
 
         // When: Queue 생성 메서드 호출
-        Queue generatedQueue = queueService.generateQueue(scheduleId, userId);
+        Queue generatedQueue = queueService.generateQueue(concertId, userId);
 
         // Then: 생성된 Queue의 속성이 올바른지 검증
         assertNotNull(generatedQueue);
         assertEquals(userId, generatedQueue.getUserId());
-        assertEquals(scheduleId, generatedQueue.getScheduleId());
+        assertEquals(concertId, generatedQueue.getConcertId());
         assertEquals(QueueState.INACTIVE, generatedQueue.getState());
         verify(queueRepository, times(1)).save(generatedQueue);
     }
@@ -65,39 +65,39 @@ public class QueueServiceTest {
     public void 주어진_UUID와_활성_큐의_상태를_조회할_때_진입이_가능한지() {
         // Given: 활성 상태의 Queue 설정
         String uuid = "uuid-1";
-        long scheduleId = 1L;
+        long concertId = 1L;
         Queue activeQueue = new Queue();
         activeQueue.setUuid(uuid);
         activeQueue.setState(QueueState.ACTIVE);
-        when(queueRepository.findByUuidAndScheduleId(uuid, scheduleId)).thenReturn(Optional.of(activeQueue));
+        when(queueRepository.findByUuidAndConcertId(uuid, concertId)).thenReturn(Optional.of(activeQueue));
 
         // When: Queue 상태 조회 메서드 호출
-        TokenResponse response = queueService.getQueueStatus(uuid, scheduleId);
+        TokenResponse response = queueService.getQueueStatus(uuid, concertId);
 
         // Then: 활성 상태일 경우 진입 가능 여부 검증
         assertTrue(response.canEnter());
-        verify(queueRepository, times(1)).findByUuidAndScheduleId(uuid, scheduleId);
+        verify(queueRepository, times(1)).findByUuidAndConcertId(uuid, concertId);
     }
 
     @Test
     public void 주어진_UUID와_비활성_큐의_상태를_조회할_때_진입이_불가능한지_및_대기수는_몇인지() {
         // Given: 비활성 상태의 Queue 설정
         String uuid = "uuid-1";
-        long scheduleId = 1L;
+        long concertId = 1L;
         Queue inactiveQueue = new Queue();
         inactiveQueue.setUuid(uuid);
         inactiveQueue.setState(QueueState.INACTIVE);
         inactiveQueue.setId(1L);
-        when(queueRepository.findByUuidAndScheduleId(uuid, scheduleId)).thenReturn(Optional.of(inactiveQueue));
+        when(queueRepository.findByUuidAndConcertId(uuid, concertId)).thenReturn(Optional.of(inactiveQueue));
         when(queueRepository.countByStatusAndIdLessThan(QueueState.INACTIVE, inactiveQueue.getId())).thenReturn(5L);
 
         // When: Queue 상태 조회 메서드 호출
-        TokenResponse response = queueService.getQueueStatus(uuid, scheduleId);
+        TokenResponse response = queueService.getQueueStatus(uuid, concertId);
 
         // Then: 비활성 상태일 경우 진입 불가 및 대기 수 검증
         assertFalse(response.canEnter());
         assertEquals(5L, response.waitingCount());
-        verify(queueRepository, times(1)).findByUuidAndScheduleId(uuid, scheduleId);
+        verify(queueRepository, times(1)).findByUuidAndConcertId(uuid, concertId);
     }
 
     @Test

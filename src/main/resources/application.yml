@@ -16,7 +16,7 @@ spring:
     generate-ddl: false
     show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate.timezone.default_storage: NORMALIZE_UTC
       hibernate.jdbc.time_zone: UTC
@@ -27,9 +27,9 @@ springdoc:
     - /api/** # swagger-ui에 표시할 api의 엔드포인트 패턴
 
 policy:
-  expirationMinutes: 5 # 토큰 만료 시간
-  maxQueueCapacity: 5 # 최대 대기 인원 수
-  seatExpiredMinutes: 5 # 좌석 예약 만료 시간
+  expiration_seconds: 300 # 토큰 만료 시간
+  seat_expired_seconds: 300 # 좌석 예약 만료 시간
+  max_queue_capacity: 5 # 최대 대기 인원 수
 
 ---
 spring.config.activate.on-profile: local, test
@@ -37,8 +37,8 @@ spring.config.activate.on-profile: local, test
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/hhplus?characterEncoding=UTF-8&serverTimezone=UTC
-    username: DBeaver
-    password: qwe123
+    username: application
+    password: application
   data:
     redis:
       host: localhost

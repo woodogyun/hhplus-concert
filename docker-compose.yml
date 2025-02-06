@@ -1,21 +1,10 @@
-version: '3'
-
-networks:
-  app-tier:
-    driver: bridge
-
 services:
-  redis:
-    image: 'bitnami/redis:latest'
-    ports:
-      - "6379:6379"
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
 
   mysql:
+    container_name: mysql
     image: mysql:8.0
     ports:
-      - "3307:3306"
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=application
@@ -23,3 +12,18 @@ services:
       - MYSQL_DATABASE=hhplus
     volumes:
       - ./data/mysql/:/var/lib/mysql
+
+  redis:
+    container_name: redis
+    image: docker.io/bitnami/redis:7.4
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+
+volumes:
+  redis_data:
+    driver: bridge

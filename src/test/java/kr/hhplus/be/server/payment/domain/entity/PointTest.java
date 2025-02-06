@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.payment.domain.entity;
 
+import kr.hhplus.be.server.api.payment.domain.entity.Point;
 import kr.hhplus.be.server.common.exception.ErrorCode;
 import kr.hhplus.be.server.common.exception.PointException;
 import org.junit.jupiter.api.Test;

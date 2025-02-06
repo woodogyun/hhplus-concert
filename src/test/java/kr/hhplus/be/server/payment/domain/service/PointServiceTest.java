@@ -1,8 +1,9 @@
 package kr.hhplus.be.server.payment.domain.service;
 
-import kr.hhplus.be.server.payment.domain.dto.PointResult;
-import kr.hhplus.be.server.payment.domain.entity.Point;
-import kr.hhplus.be.server.payment.domain.repository.PointRepository;
+import kr.hhplus.be.server.api.payment.domain.dto.PointResult;
+import kr.hhplus.be.server.api.payment.domain.entity.Point;
+import kr.hhplus.be.server.api.payment.domain.repository.PointRepository;
+import kr.hhplus.be.server.api.payment.domain.service.PointService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

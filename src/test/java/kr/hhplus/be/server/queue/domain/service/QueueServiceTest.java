@@ -1,134 +1,120 @@
 package kr.hhplus.be.server.queue.domain.service;
 
-import kr.hhplus.be.server.queue.domain.entity.QueueState;
-import kr.hhplus.be.server.queue.application.dto.TokenResponse;
-import kr.hhplus.be.server.queue.domain.entity.Queue;
-import kr.hhplus.be.server.queue.infra.QueueRepositoryImpl;
+import kr.hhplus.be.server.api.queue.application.dto.TokenResponse;
+import kr.hhplus.be.server.api.queue.domain.entity.Queue;
+import kr.hhplus.be.server.api.queue.domain.service.QueueService;
+import kr.hhplus.be.server.api.queue.infra.QueueRepositoryImpl;
+import kr.hhplus.be.server.provider.TimeProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class QueueServiceTest {
-
-    @Mock
-    private QueueRepositoryImpl queueRepository;
+class QueueServiceTest {
 
     @InjectMocks
     private QueueService queueService;
 
+    @Mock
+    private QueueRepositoryImpl queueRepositoryImpl;
+
+    @Mock
+    private TimeProvider timeProvider;
+
+    private Queue queue;
+
     @BeforeEach
-    public void setUp() {
-        // 테스트를 위한 Mock Queue 객체 리스트 생성
-        List<Queue> mockQueues = new ArrayList<>();
-        // scheduleId를 고정하여 100개의 Queue 객체 생성
-        for (int i = 1; i <= 100; i++) {
-            Queue queue = new Queue();
-            queue.setUserId(Integer.toUnsignedLong(i));
-            queue.setUuid("uuid-" + i); // UUID는 고유하게 설정
-            queue.setConcertId(1L); // 고정된 scheduleId
-            queue.setState(QueueState.INACTIVE);
-            queue.setExpiresAt(null); // INACTIVE 상태이므로 만료 시간 없음
-            mockQueues.add(queue);
-        }
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        long userId = 123L;
+        queue = Queue.create(userId);
+        queue.passQueue(LocalDateTime.now().plusMinutes(10)); // 상태를 '통과'로 설정
     }
 
     @Test
-    public void 주어진_사용자와_큐를_생성할_때_생성된_큐가_올바른지() {
-        // Given: 새로운 Queue를 생성할 사용자 ID와 콘서트 ID 설정
-        Long concertId = 1L;
-        Long userId = 1L;
-        when(queueRepository.findByConcertIdAndUserId(userId, concertId)).thenReturn(Optional.empty());
+    void 토큰_생성_테스트() {
+        // Given
+        when(queueRepositoryImpl.save(any(Queue.class))).thenReturn(queue);
 
-        // When: Queue 생성 메서드 호출
-        Queue generatedQueue = queueService.generateQueue(concertId, userId);
+        // When
+        TokenResponse response = queueService.generateToken(123L);
 
-        // Then: 생성된 Queue의 속성이 올바른지 검증
-        assertNotNull(generatedQueue);
-        assertEquals(userId, generatedQueue.getUserId());
-        assertEquals(concertId, generatedQueue.getConcertId());
-        assertEquals(QueueState.INACTIVE, generatedQueue.getState());
-        verify(queueRepository, times(1)).save(generatedQueue);
+        // Then
+        assertNotNull(response);
+        assertEquals(queue.getUuid(), response.uuid());
     }
 
     @Test
-    public void 주어진_UUID와_활성_큐의_상태를_조회할_때_진입이_가능한지() {
-        // Given: 활성 상태의 Queue 설정
-        String uuid = "uuid-1";
-        long concertId = 1L;
-        Queue activeQueue = new Queue();
-        activeQueue.setUuid(uuid);
-        activeQueue.setState(QueueState.ACTIVE);
-        when(queueRepository.findByUuidAndConcertId(uuid, concertId)).thenReturn(Optional.of(activeQueue));
+    void 큐_상태_조회_테스트_통과() {
+        // Given
+        when(queueRepositoryImpl.findByUuid(queue.getUuid())).thenReturn(Optional.of(queue));
 
-        // When: Queue 상태 조회 메서드 호출
-        TokenResponse response = queueService.getQueueStatus(uuid, concertId);
+        // When
+        TokenResponse response = queueService.getQueueStatus(queue.getUuid());
 
-        // Then: 활성 상태일 경우 진입 가능 여부 검증
+        // Then
         assertTrue(response.canEnter());
-        verify(queueRepository, times(1)).findByUuidAndConcertId(uuid, concertId);
+        assertNull(response.waitingCount());
     }
 
     @Test
-    public void 주어진_UUID와_비활성_큐의_상태를_조회할_때_진입이_불가능한지_및_대기수는_몇인지() {
-        // Given: 비활성 상태의 Queue 설정
-        String uuid = "uuid-1";
-        long concertId = 1L;
-        Queue inactiveQueue = new Queue();
-        inactiveQueue.setUuid(uuid);
-        inactiveQueue.setState(QueueState.INACTIVE);
-        inactiveQueue.setId(1L);
-        when(queueRepository.findByUuidAndConcertId(uuid, concertId)).thenReturn(Optional.of(inactiveQueue));
-        when(queueRepository.countByStatusAndIdLessThan(QueueState.INACTIVE, inactiveQueue.getId())).thenReturn(5L);
+    void 큐_상태_조회_테스트_대기중() {
+        // Given
+        Queue waitingQueue = Queue.create(456L);
+        when(queueRepositoryImpl.findByUuid(waitingQueue.getUuid())).thenReturn(Optional.of(waitingQueue));
+        when(queueRepositoryImpl.countByIsQueuePassedAndIdLessThan(false, waitingQueue.getId())).thenReturn(5L);
 
-        // When: Queue 상태 조회 메서드 호출
-        TokenResponse response = queueService.getQueueStatus(uuid, concertId);
+        // When
+        TokenResponse response = queueService.getQueueStatus(waitingQueue.getUuid());
 
-        // Then: 비활성 상태일 경우 진입 불가 및 대기 수 검증
+        // Then
         assertFalse(response.canEnter());
         assertEquals(5L, response.waitingCount());
-        verify(queueRepository, times(1)).findByUuidAndConcertId(uuid, concertId);
     }
 
     @Test
-    public void 활성_큐의_수량을_조회할_때_정확한_수량인지() {
-        // Given: 활성 상태의 Queue 수 설정
-        when(queueRepository.countByStatus(QueueState.ACTIVE)).thenReturn(10);
+    void 토큰_삭제_테스트() {
+        // Given
+        when(queueRepositoryImpl.findExpiredTokens()).thenReturn(Collections.singletonList(queue));
 
-        // When: 활성 Queue 수 조회 메서드 호출
-        int activeCount = queueService.countActiveQueues();
-
-        // Then: 활성 Queue 수가 올바른지 검증
-        assertEquals(10, activeCount);
-        verify(queueRepository, times(1)).countByStatus(QueueState.ACTIVE);
-    }
-
-    @Test
-    public void 만료된_토큰을_삭제할_때_삭제된_갯수가_맞는지() {
-        // Given: 만료된 토큰 리스트 생성
-        List<Queue> expiredTokens = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            Queue queue = new Queue();
-            queue.setId((long) i);
-            expiredTokens.add(queue);
-        }
-        when(queueRepository.findExpiredTokens()).thenReturn(expiredTokens);
-
-        // When: 만료된 토큰 삭제 메서드 호출
+        // When
         long deletedCount = queueService.deleteToken();
 
-        // Then: 삭제된 토큰 수 검증
-        assertEquals(5, deletedCount);
-        verify(queueRepository, times(1)).deleteAll(expiredTokens);
+        // Then
+        assertEquals(1, deletedCount);
+        verify(queueRepositoryImpl).deleteAll(Collections.singletonList(queue));
+    }
+
+    @Test
+    void 토큰_조회_테스트() {
+        // Given
+        when(queueRepositoryImpl.findByUuid(queue.getUuid())).thenReturn(Optional.of(queue));
+
+        // When
+        Queue foundQueue = queueService.getToken(queue.getUuid());
+
+        // Then
+        assertNotNull(foundQueue);
+        assertEquals(queue.getUuid(), foundQueue.getUuid());
+    }
+
+    @Test
+    void 토큰_삭제_유저_테스트() {
+        // Given
+        long userId = 123L;
+
+        // When
+        queueService.delete(userId);
+
+        // Then
+        verify(queueRepositoryImpl).deleteByUserId(userId);
     }
 }

@@ -1,10 +1,11 @@
 package kr.hhplus.be.server.concert.domain.service;
 
+import kr.hhplus.be.server.api.concert.domain.service.SeatService;
 import kr.hhplus.be.server.common.exception.SeatException;
-import kr.hhplus.be.server.concert.domain.dto.SeatResult;
-import kr.hhplus.be.server.concert.domain.entity.Seat;
-import kr.hhplus.be.server.concert.domain.entity.SeatState;
-import kr.hhplus.be.server.concert.domain.repository.SeatRepository;
+import kr.hhplus.be.server.api.concert.domain.dto.SeatResult;
+import kr.hhplus.be.server.api.concert.domain.entity.Seat;
+import kr.hhplus.be.server.api.concert.domain.entity.SeatState;
+import kr.hhplus.be.server.api.concert.domain.repository.SeatRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

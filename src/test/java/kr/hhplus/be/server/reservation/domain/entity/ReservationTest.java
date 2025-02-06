@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.reservation.domain.entity;
 
+import kr.hhplus.be.server.api.reservation.domain.entity.Reservation;
+import kr.hhplus.be.server.api.reservation.domain.entity.ReservationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

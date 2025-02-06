@@ -46,6 +46,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	// redisson
+	implementation ("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.redisson:redisson:3.42.0")
 
 	// Test

@@ -5,25 +5,21 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
 @ConfigurationProperties(prefix = "policy")
 @Getter
 @Setter
 public class PolicyProperties {
 
-    private int maxQueueCapacity; // 진입 인원 수
-    private int expirationMinutes; // 토큰 만료 시간
-    private int seatExpiredMinutes; // 좌석 만료 시간
+    private  int maxQueueCapacity; // 진입 인원 수
+    private  int expirationSeconds; // 토큰 만료 시간
+    private  int seatExpiredSeconds; // 좌석 만료 시간
 
-    // 현재 시간에 expirationMinutes를 더한 만료 시간 계산
-    public LocalDateTime calculateTokenExpirationTime() {
-        return LocalDateTime.now().plusMinutes(expirationMinutes);
-    }
+//    @ConstructorBinding
+//    public PolicyProperties(int maxQueueCapacity, int expirationSeconds, int seatExpiredSeconds) {
+//        this.maxQueueCapacity = maxQueueCapacity;
+//        this.expirationSeconds = expirationSeconds;
+//        this.seatExpiredSeconds = seatExpiredSeconds;
+//    }
 
-    // 현재 시간에 seatExpiredMinutes를 더한 좌석 만료 시간 계산
-    public LocalDateTime calculateSeatExpirationTime() {
-        return LocalDateTime.now().plusMinutes(seatExpiredMinutes);
-    }
 }

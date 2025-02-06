@@ -1,8 +1,9 @@
 package kr.hhplus.be.server.concert.domain.service;
 
-import kr.hhplus.be.server.concert.domain.dto.ConcertScheduleResult;
-import kr.hhplus.be.server.concert.domain.entity.ConcertSchedule;
-import kr.hhplus.be.server.concert.domain.repository.ConcertScheduleRepository;
+import kr.hhplus.be.server.api.concert.domain.dto.ConcertScheduleResult;
+import kr.hhplus.be.server.api.concert.domain.entity.ConcertSchedule;
+import kr.hhplus.be.server.api.concert.domain.repository.ConcertScheduleRepository;
+import kr.hhplus.be.server.api.concert.domain.service.ConcertScheduleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

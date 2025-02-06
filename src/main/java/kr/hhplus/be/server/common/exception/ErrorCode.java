@@ -16,9 +16,10 @@ public enum ErrorCode  {
     INVALID_POINT_VALUE( "잘못된 포인트 값입니다."),
 
     //user
+    INVALID_USER("올바른 유저가 아닙니다."),
 
     //token
-    NOT_FOUNT_TOKEN("토큰을 찾을 수 없습니다."),
+    NOT_FOUND_TOKEN("토큰을 찾을 수 없습니다."),
     EXPIRED_TOKEN("토큰이 만료되었습니다.");
 
 

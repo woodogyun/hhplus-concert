@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.concert.domain.entity;
+import kr.hhplus.be.server.api.concert.domain.entity.Seat;
+import kr.hhplus.be.server.api.concert.domain.entity.SeatState;
 import kr.hhplus.be.server.common.exception.ErrorCode;
 import kr.hhplus.be.server.common.exception.SeatReservationException;
 import org.junit.jupiter.api.Test;

@@ -39,8 +39,8 @@ class TestcontainersConfiguration {
 		String redisHost = REDIS_CONTAINER.getHost();
 		Integer redisPort = REDIS_CONTAINER.getFirstMappedPort();
 
-		System.setProperty("spring.redis.data.host", redisHost);
-		System.setProperty("spring.redis.data.port", redisPort.toString());
+		System.setProperty("spring.redis.host", redisHost);
+		System.setProperty("spring.redis.port", redisPort.toString());
 	}
 
 	@PreDestroy

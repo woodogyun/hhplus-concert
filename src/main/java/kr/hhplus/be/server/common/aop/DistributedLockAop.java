@@ -3,12 +3,15 @@ package kr.hhplus.be.server.common.aop;
 import kr.hhplus.be.server.common.annotation.DistributedLock;
 import kr.hhplus.be.server.common.parser.CustomSpringELParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -18,37 +21,34 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Component
+@Order(Ordered.LOWEST_PRECEDENCE-1)
+@Slf4j
 @RequiredArgsConstructor
 public class DistributedLockAop {
     private static final String REDISSON_LOCK_PREFIX = "LOCK:";
 
     private final RedissonClient redissonClient;
-    private final AopForTransaction aopForTransaction;
 
     @Around("@annotation(kr.hhplus.be.server.common.annotation.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();Method method = signature.getMethod();
+        DistributedLock distributeLock = method.getAnnotation(DistributedLock.class);     // 해당 메서드의 어노테이션을 가져온다
+        String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributeLock.key());    // DistributeLock에 전달한 key와 메서드 인자를 통한 Lock key값생성(Spring EL파싱)
 
-        String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
-        RLock rLock = redissonClient.getLock(key);  // (1)
+        RLock rLock = redissonClient.getLock(key);
 
         try {
-            boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
+            boolean available = rLock.tryLock(distributeLock.waitTime(), distributeLock.leaseTime(), distributeLock.timeUnit());    // 락 획득 시도
             if (!available) {
                 return false;
             }
-
-            return aopForTransaction.proceed(joinPoint);  // (3)
-        } catch (InterruptedException e) {
+            log.info("get lock success {}" , key);
+            return joinPoint.proceed();
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
             throw new InterruptedException();
         } finally {
-            try {
-                rLock.unlock();   // (4)
-            } catch (IllegalMonitorStateException e) {
-                throw new InterruptedException();
-            }
+            rLock.unlock();    // 종료 혹은 예외 발생시 Lock 해제
         }
     }
 }

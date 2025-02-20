@@ -4,13 +4,15 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.kafka.ConfluentKafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @Configuration
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
 	public static final MySQLContainer<?> MYSQL_CONTAINER;
 	public static final GenericContainer<?> REDIS_CONTAINER;
+	public static final ConfluentKafkaContainer KAFKA_CONTAINER;
 
 	static {
 		// 1) MySQL Container
@@ -34,13 +36,14 @@ class TestcontainersConfiguration {
 		REDIS_CONTAINER.start();
 
 		// Apply Redis connection properties
-		// Typically you'll configure "spring.redis.host" / "spring.redis.port"
-		// so that Spring can connect to the container in tests.
 		String redisHost = REDIS_CONTAINER.getHost();
 		Integer redisPort = REDIS_CONTAINER.getFirstMappedPort();
+		System.setProperty("spring.redis.host", redisHost);  // 수정된 키
+		System.setProperty("spring.redis.port", redisPort.toString());  // 수정된 키
 
-		System.setProperty("spring.redis.host", redisHost);
-		System.setProperty("spring.redis.port", redisPort.toString());
+		// 3) Kafka Container
+		KAFKA_CONTAINER = new ConfluentKafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest"));
+		KAFKA_CONTAINER.start();
 	}
 
 	@PreDestroy
@@ -50,6 +53,9 @@ class TestcontainersConfiguration {
 		}
 		if (REDIS_CONTAINER.isRunning()) {
 			REDIS_CONTAINER.stop();
+		}
+		if (KAFKA_CONTAINER.isRunning()) {
+			KAFKA_CONTAINER.stop();
 		}
 	}
 }

@@ -49,11 +49,18 @@ dependencies {
 	implementation ("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.redisson:redisson:3.42.0")
 
+	// kafka
+	implementation ("org.springframework.kafka:spring-kafka")
+
 	// Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
-	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
+	testImplementation ("org.testcontainers:redis")
+	testImplementation ("org.testcontainers:kafka")
+	testImplementation ("org.springframework.kafka:spring-kafka-test")
+	testImplementation("org.testcontainers:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
